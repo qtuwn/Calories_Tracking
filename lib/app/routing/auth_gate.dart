@@ -5,6 +5,7 @@ import 'package:calories_app/shared/state/auth_providers.dart';
 import 'profile_gate.dart';
 
 /// AuthGate - Returns LoginScreen if not signed in, otherwise ProfileGate
+/// - Handles the initial auth state and directs users to the appropriate screen
 class AuthGate extends ConsumerWidget {
   const AuthGate({super.key});
 
