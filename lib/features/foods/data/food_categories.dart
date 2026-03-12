@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:calories_app/core/theme/app_colors.dart';
 
-/// List of known food categories
+/// foodCategories - Danh sách các loại thực phẩm được nhận diện trong ứng dụng.
+/// Dùng để phân loại thực phẩm khi hiển thị và xử lý dữ liệu.
 const foodCategories = <String>[
   'All',
   'Rice',
@@ -12,8 +13,8 @@ const foodCategories = <String>[
   'Snack',
 ];
 
-/// Maps a category string to a pastel color
-/// Uses low opacity to maintain the pastel aesthetic
+/// categoryColor - Chuyển tên loại thực phẩm thành màu pastel tương ứng.
+/// Giúp giao diện dễ nhận biết và phân biệt các loại thực phẩm.
 Color categoryColor(String? category) {
   if (category == null || category.isEmpty) {
     return Colors.grey;
