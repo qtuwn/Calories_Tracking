@@ -1,3 +1,6 @@
+// Legacy Food model file
+// Lưu ý: File này tồn tại để hỗ trợ quá trình migration từ model cũ sang domain/foods/food.dart.
+// Không nên sử dụng cho code mới. Xem hướng dẫn migration trong comment class.
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Food model representing a food item in the catalog
@@ -34,6 +37,8 @@ class Food {
   });
 
   factory Food.fromDoc(DocumentSnapshot doc) {
+    // Chuyển đổi dữ liệu từ Firestore DocumentSnapshot sang Food model.
+    // Sử dụng cho các thao tác đọc dữ liệu cũ từ Firestore.
     final data = doc.data() as Map<String, dynamic>? ?? {};
     final updatedAtTimestamp = data['updatedAt'] as Timestamp?;
 
@@ -54,6 +59,8 @@ class Food {
   }
 
   Map<String, dynamic> toMap() {
+    // Chuyển đổi Food model thành Map để lưu lên Firestore.
+    // Chỉ dùng cho legacy code, không áp dụng cho domain mới.
     return {
       'name': name,
       'nameLower': nameLower,
@@ -69,6 +76,8 @@ class Food {
   }
 
   Food copyWith({
+    // Tạo một bản sao Food với các thuộc tính có thể thay đổi.
+    // Hỗ trợ cập nhật dữ liệu trong legacy code.
     String? id,
     String? name,
     String? nameLower,
