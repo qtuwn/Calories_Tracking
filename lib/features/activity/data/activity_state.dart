@@ -1,4 +1,3 @@
-/// State for activity tracking (steps, connection status).
 class ActivityState {
   final bool connected;
   final int steps;
