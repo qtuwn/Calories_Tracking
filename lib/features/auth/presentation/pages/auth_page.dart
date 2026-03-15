@@ -28,21 +28,20 @@ class _AuthPageState extends ConsumerState<AuthPage> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-  }
-
+  }// Navigate back to sign in page
   void _navigateToSignIn() {
     _pageController.previousPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
-
+// Navigate to forgot password screen
   void _navigateToForgotPassword() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
     );
   }
-
+// Dispose the page controller when the widget is removed from the widget tree
   @override
   void dispose() {
     _pageController.dispose();
