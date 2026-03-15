@@ -113,7 +113,8 @@ class DiaryEntry {
       }
       return null;
     }
-
+    /// Name to display on Home dashboard
+  
     // Helper to safely convert to double (non-null)
     double toDouble(dynamic value) {
       return toDoubleNullable(value) ?? 0.0;
@@ -338,6 +339,16 @@ class DiaryEntry {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+  /// Name to display on Home dashboard
+  String get displayName {
+    if (isFood) {
+      return foodName ?? 'Unknown Food';
+    }
+    if (isExercise) {
+      return exerciseName ?? 'Unknown Exercise';
+    }
+    return '';
   }
 }
 
