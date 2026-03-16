@@ -1,3 +1,6 @@
+// Legacy FoodRepository file
+// Lưu ý: File này chỉ dùng cho code cũ, đang trong quá trình migration sang domain/foods/food_repository.dart.
+// Không nên sử dụng cho code mới.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:calories_app/features/foods/data/food_model.dart';
@@ -10,6 +13,7 @@ import 'package:calories_app/shared/utils/audit_logger.dart';
 /// Migration guide: Use FoodService from lib/shared/state/food_providers.dart
 @Deprecated('Use domain/foods/food_repository.dart and FirestoreFoodRepository instead. Migration in progress.')
 class FoodRepository {
+  // Repository quản lý dữ liệu thực phẩm trên Firestore cho legacy code.
   final FirebaseFirestore _firestore;
 
   FoodRepository({FirebaseFirestore? instance})
@@ -18,6 +22,7 @@ class FoodRepository {
   /// Search foods by name (case-insensitive prefix search)
   /// Returns empty stream if query is empty
   Stream<List<Food>> searchFoods(String query) {
+    // Tìm kiếm thực phẩm theo tên (không phân biệt hoa thường), trả về stream.
     if (query.trim().isEmpty) {
       return const Stream.empty();
     }
@@ -38,6 +43,7 @@ class FoodRepository {
 
   /// Get all foods as a stream
   Stream<List<Food>> getAllFoods() {
+    // Lấy toàn bộ thực phẩm, trả về stream.
     return _firestore.collection('foods').orderBy('nameLower').snapshots().map((
       snapshot,
     ) {
@@ -50,6 +56,7 @@ class FoodRepository {
   /// Otherwise updates the existing document
   /// [actorUid] - The UID of the admin performing the action (for audit logging)
   Future<void> createOrUpdateFood(Food food, String actorUid) async {
+    // Tạo mới hoặc cập nhật thực phẩm, có log audit cho admin.
     try {
       final foodData = food.toMap();
       // Ensure nameLower is set
@@ -98,6 +105,7 @@ class FoodRepository {
     String actorUid, {
     String? foodName,
   }) async {
+    // Xóa thực phẩm theo id, có log audit cho admin.
     try {
       await _firestore.collection('foods').doc(id).delete();
       debugPrint('[FoodRepository] ✅ Deleted food: $id');
@@ -118,6 +126,7 @@ class FoodRepository {
 
   /// Get a single food by ID
   Future<Food?> getFoodById(String id) async {
+    // Lấy thực phẩm theo id, trả về Food hoặc null.
     try {
       final doc = await _firestore.collection('foods').doc(id).get();
       if (doc.exists) {
@@ -134,6 +143,7 @@ class FoodRepository {
     /// Search foods by name and filter by goal type
   /// goalType: "lose_fat" | "muscle_gain" | "vegan" | "maintain"
   Stream<List<Food>> searchFoodsByGoal(String query, String goalType) {
+    // Tìm kiếm thực phẩm theo tên và lọc theo mục tiêu (goalType), trả về stream.
     if (query.trim().isEmpty) {
       return const Stream.empty();
     }
@@ -180,6 +190,7 @@ class FoodRepository {
     /// Get all foods filtered by goal type
   /// Similar to searchFoodsByGoal but without name filtering
   Stream<List<Food>> getAllFoodsByGoal(String goalType) {
+    // Lấy toàn bộ thực phẩm, lọc theo mục tiêu (goalType), trả về stream.
     final baseQuery = _firestore
         .collection('foods')
         .orderBy('nameLower')
