@@ -1,3 +1,31 @@
+// =============================================================================
+// UserMealPlanRepositoryImpl
+// =============================================================================
+// This file contains the Firestore (Cloud Firestore) implementation of the
+// [UserMealPlanRepository] interface, which handles all persistence operations
+// for a user's personal meal plans.
+//
+// Key responsibilities:
+//  - CRUD operations on the Firestore subcollection:
+//      users/{userId}/user_meal_plans/{planId}
+//  - Managing the "active plan" invariant: at most ONE plan can be active at
+//    any given time. All plan-switching operations use atomic batch writes to
+//    prevent race conditions.
+//  - Applying explore templates (pre-built plans) or custom plans as the
+//    user's current active plan, including deep-copying all days and meals.
+//  - Post-write verification after every critical write to detect failures
+//    early and surface them with meaningful error messages.
+//
+// Data model (Firestore subcollection hierarchy):
+//   users/{userId}/user_meal_plans/{planId}               ← plan document
+//   users/{userId}/user_meal_plans/{planId}/days/{dayId}  ← day document
+//   users/{userId}/user_meal_plans/{planId}/days/{dayId}/meals/{mealId} ← meal
+//
+// Domain / DTO mapping:
+//   All Firestore reads go through [UserMealPlanDto] → toDomain().
+//   All Firestore writes go through _domainToDto() → UserMealPlanDto.toFirestore().
+// =============================================================================
+
 import 'dart:developer' as dev;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +47,14 @@ import 'package:calories_app/features/meal_plans/data/dto/user_meal_plan_dto.dar
 import 'package:calories_app/features/meal_plans/data/dto/meal_item_dto.dart';
 
 /// Exception thrown when applying an explore template fails due to invalid data
+///
+/// Carries structured context (userId, templateId, dayIndex, slotIndex,
+/// mealType) so that stack traces in logs are immediately actionable —
+/// you can identify exactly which template slot caused the failure without
+/// having to re-run the operation.
+///
+/// [details] is an optional free-form map for extra diagnostic data
+/// (e.g. the actual numeric value that failed a range check).
 class MealPlanApplyException implements Exception {
   final String message;
   final String userId;
