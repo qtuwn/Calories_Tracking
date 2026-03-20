@@ -83,15 +83,32 @@ class MealPlanApplyException implements Exception {
   }
 }
 
-/// Firestore implementation of UserMealPlanRepository
+/// Firestore (Cloud Firestore) implementation of [UserMealPlanRepository].
 ///
-/// Uses DTOs internally and maps to domain models.
-/// Collection: users/{userId}/user_meal_plans/{planId}
+/// Uses Data Transfer Objects (DTOs) internally for Firestore serialisation and
+/// maps results back to domain model objects before returning them to callers.
+///
+/// Firestore collection path:
+///   `users/{userId}/user_meal_plans/{planId}`
+///
+/// Invariant enforced by this class:
+///   A user may have **at most one** active plan at any point in time.
+///   Every method that activates a plan first queries for existing active plans
+///   and deactivates them within the same [WriteBatch] to guarantee atomicity.
 class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
+  // Firestore instance used for all database operations.
   final FirebaseFirestore _firestore;
+
+  // Repository for reading pre-built explore (template) meal plans.
+  // Injected to allow substitution with a mock during unit tests.
   final ExploreMealPlanRepository _exploreRepo;
 
-  /// Helper to convert domain UserMealPlan to UserMealPlanDto
+  /// Converts a [UserMealPlan] domain model to a [UserMealPlanDto] for
+  /// Firestore serialisation.
+  ///
+  /// Enum fields are stored as their raw [String] values (`.value`) so that
+  /// Firestore documents remain human-readable and decoupled from Dart enum
+  /// internals. The reverse conversion is handled inside [UserMealPlanDto.toDomain()].
   UserMealPlanDto _domainToDto(UserMealPlan plan) {
     return UserMealPlanDto(
       id: plan.id,
@@ -114,6 +131,10 @@ class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
     );
   }
 
+  /// Creates a [UserMealPlanRepositoryImpl].
+  ///
+  /// Both [instance] and [exploreRepo] are optional to support dependency
+  /// injection (DI) in tests. When omitted, production singletons are used.
   UserMealPlanRepositoryImpl({
     FirebaseFirestore? instance,
     ExploreMealPlanRepository? exploreRepo,
