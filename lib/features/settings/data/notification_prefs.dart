@@ -11,6 +11,7 @@ class NotificationPrefs {
   final TimeOfDay lunchTime;
   final TimeOfDay dinnerTime;
   final TimeOfDay exerciseTime;
+  final TimeOfDay waterReminderTime;
 
   const NotificationPrefs({
     this.enableMealReminders = true,
@@ -20,6 +21,8 @@ class NotificationPrefs {
     this.lunchTime = const TimeOfDay(hour: 12, minute: 15),
     this.dinnerTime = const TimeOfDay(hour: 19, minute: 30),
     this.exerciseTime = const TimeOfDay(hour: 17, minute: 0),
+    this.waterReminderTime = const TimeOfDay(hour: 10, minute: 0),
+
   });
 
   NotificationPrefs copyWith({
