@@ -3,10 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:calories_app/shared/config/gemini_config.dart';
 
-/// API client for Gemini REST API
-/// 
-/// Handles communication with Google's Gemini API to parse voice transcripts
-/// into structured food information.
 class GeminiVoiceApi {
   static const String _baseUrl = 'https://generativelanguage.googleapis.com/v1beta';
   static const String _model = 'gemini-pro';
@@ -23,14 +19,6 @@ class GeminiVoiceApi {
     }
   }
 
-  /// Parse a voice transcript into structured food data
-  /// 
-  /// Sends the transcript to Gemini API with a prompt to extract:
-  /// - Food name
-  /// - Estimated calories
-  /// - Quantity/portion size
-  /// 
-  /// Returns a JSON map with the structured data.
   Future<Map<String, dynamic>> parseFoodTranscript(String transcript) async {
     if (transcript.trim().isEmpty) {
       throw Exception('Transcript cannot be empty');
@@ -38,7 +26,6 @@ class GeminiVoiceApi {
 
     final url = Uri.parse('$_baseUrl/models/$_model:generateContent?key=$_apiKey');
 
-    // Construct the prompt for Gemini
     final prompt = _buildPrompt(transcript);
 
     final requestBody = {
@@ -79,7 +66,6 @@ class GeminiVoiceApi {
 
       final responseData = jsonDecode(response.body) as Map<String, dynamic>;
       
-      // Extract the text response from Gemini
       final candidates = responseData['candidates'] as List?;
       if (candidates == null || candidates.isEmpty) {
         throw Exception('No response from Gemini API');
@@ -101,8 +87,6 @@ class GeminiVoiceApi {
       debugPrint('[GeminiVoiceApi] ✅ Received response from Gemini');
       debugPrint('[GeminiVoiceApi] Response text: $text');
 
-      // Parse the JSON response from Gemini
-      // Gemini should return a JSON object, but it might be wrapped in markdown
       final jsonText = _extractJsonFromText(text);
       final parsedData = jsonDecode(jsonText) as Map<String, dynamic>;
 
@@ -114,7 +98,6 @@ class GeminiVoiceApi {
     }
   }
 
-  /// Build the prompt for Gemini API
   String _buildPrompt(String transcript) {
     return '''
 You are a nutrition assistant. Parse the following voice transcript about food intake and return a JSON object with the following structure:
@@ -139,12 +122,9 @@ Return the JSON object now:
 ''';
   }
 
-  /// Extract JSON from text (handles markdown code blocks)
   String _extractJsonFromText(String text) {
-    // Remove markdown code blocks if present
     String cleaned = text.trim();
     
-    // Remove ```json or ``` markers
     if (cleaned.startsWith('```')) {
       final lines = cleaned.split('\n');
       if (lines.first.contains('```')) {
@@ -156,7 +136,6 @@ Return the JSON object now:
       cleaned = lines.join('\n');
     }
     
-    // Find JSON object boundaries
     final jsonStart = cleaned.indexOf('{');
     final jsonEnd = cleaned.lastIndexOf('}');
     
