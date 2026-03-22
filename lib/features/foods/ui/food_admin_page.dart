@@ -1,3 +1,6 @@
+// Trang quản trị thực phẩm (FoodAdminPage)
+// Chỉ dành cho admin, cho phép quản lý danh mục thực phẩm.
+// Sử dụng provider và service mới, UI hỗ trợ filter, thêm, sửa, xóa thực phẩm.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +13,7 @@ import 'package:calories_app/shared/state/auth_providers.dart';
 
 /// Admin-only page for managing the food catalog
 class FoodAdminPage extends ConsumerWidget {
+  // Widget trang quản trị thực phẩm, chỉ truy cập được với tài khoản admin.
   static const routeName = '/food-admin';
 
   const FoodAdminPage({super.key});
@@ -70,6 +74,7 @@ class FoodAdminPage extends ConsumerWidget {
   }
 
   Widget _buildAdminPage(BuildContext context, WidgetRef ref) {
+    // Xây dựng UI chính cho trang admin: filter, danh sách thực phẩm, nút thêm mới.
     final foodsAsync = ref.watch(food_providers.allFoodsProvider);
     final selectedCategory = ref.watch(foodCategoryFilterProvider);
 
@@ -288,6 +293,7 @@ class FoodAdminPage extends ConsumerWidget {
     WidgetRef ref,
     String? selectedCategory,
   ) {
+    // Thanh filter theo loại thực phẩm, cho phép chọn nhanh các category.
     return Container(
       color: AppColors.palePink,
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -342,6 +348,7 @@ class FoodAdminPage extends ConsumerWidget {
   }
 
   Widget _buildFoodCard(BuildContext context, WidgetRef ref, Food food) {
+    // Card hiển thị thông tin thực phẩm, có nút sửa và xóa.
     final catColor = categoryColor(food.category).withValues(alpha: 0.4);
 
     return Container(
@@ -461,6 +468,7 @@ class FoodAdminPage extends ConsumerWidget {
   }
 
   void _showFoodForm(BuildContext context, WidgetRef ref, Food? existingFood) {
+    // Hiển thị form thêm/sửa thực phẩm dưới dạng bottom sheet.
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -503,6 +511,7 @@ class FoodAdminPage extends ConsumerWidget {
   }
 
   void _showDeleteDialog(BuildContext context, WidgetRef ref, Food food) {
+    // Hiển thị dialog xác nhận xóa thực phẩm.
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -565,6 +574,7 @@ class FoodAdminPage extends ConsumerWidget {
 }
 
 class _FoodFormDialog extends StatefulWidget {
+// Dialog form nhập liệu cho thực phẩm (thêm/sửa), dùng trong trang admin.
   final Food? existingFood;
   final Function(Food) onSave;
 
@@ -575,6 +585,7 @@ class _FoodFormDialog extends StatefulWidget {
 }
 
 class _FoodFormDialogState extends State<_FoodFormDialog> {
+  // State quản lý form nhập liệu cho thực phẩm.
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _categoryController;
