@@ -53,6 +53,11 @@ class _AuthPageState extends ConsumerState<AuthPage> {
     // Watch auth state - if user signs in, show ProfileGate
     final authStateAsync = ref.watch(authStateProvider);
 
+  @override
+  Widget build(BuildContext context) {
+    // Watch auth state - if user signs in, show ProfileGate
+    final authStateAsync = ref.watch(authStateProvider);
+
     return authStateAsync.when(
       data: (user) {
         if (user != null) {
