@@ -1,7 +1,10 @@
+// Model nhật ký (DiaryEntry) cho tính năng Home/Diary
+// Hỗ trợ ghi nhận thực phẩm và bài tập theo ngày, dùng cho thống kê và hiển thị lịch sử.
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Type of diary entry
 enum DiaryEntryType {
+  // Loại entry: thực phẩm hoặc bài tập
   food,
   exercise;
 
@@ -23,6 +26,7 @@ enum DiaryEntryType {
 /// - Uses: exerciseId, exerciseName, durationMinutes, caloriesBurned
 /// - mealType is null (exercises are not tied to meals)
 class DiaryEntry {
+  // Model đại diện cho một entry trong nhật ký (thực phẩm hoặc bài tập)
   final String id;
   final String userId;
   final String date; // ISO date string: "yyyy-MM-dd"
@@ -82,6 +86,7 @@ class DiaryEntry {
 
   /// Create DiaryEntry from Firestore document
   factory DiaryEntry.fromDoc(DocumentSnapshot doc) {
+    // Tạo DiaryEntry từ Firestore document, hỗ trợ chuyển đổi dữ liệu linh hoạt.
     final data = doc.data() as Map<String, dynamic>? ?? {};
     
     // Helper to parse DateTime from various formats
@@ -152,6 +157,7 @@ class DiaryEntry {
 
   /// Convert DiaryEntry to Firestore map
   Map<String, dynamic> toMap() {
+    // Chuyển DiaryEntry thành map để lưu lên Firestore.
     final map = <String, dynamic>{
       'userId': userId,
       'date': date,
@@ -192,6 +198,7 @@ class DiaryEntry {
 
   /// Factory method to create a food diary entry
   factory DiaryEntry.food({
+    // Factory tạo entry cho thực phẩm.
     required String id,
     required String userId,
     required String date,
@@ -230,6 +237,7 @@ class DiaryEntry {
 
   /// Factory method to create an exercise diary entry
   factory DiaryEntry.exercise({
+    // Factory tạo entry cho bài tập.
     required String id,
     required String userId,
     required String date,
@@ -268,6 +276,7 @@ class DiaryEntry {
   /// This allows the existing Meal/DiaryMealItem structure to work with DiaryEntry
   /// Only works for food entries
   Map<String, dynamic> toMealItemJson() {
+    // Chuyển entry thực phẩm sang dạng MealItem (cho UI cũ).
     if (!isFood || totalGrams == null) {
       throw StateError('toMealItemJson can only be called on food entries');
     }
@@ -291,6 +300,7 @@ class DiaryEntry {
   }
 
   DiaryEntry copyWith({
+    // Tạo bản sao DiaryEntry với các trường có thể thay đổi.
     String? id,
     String? userId,
     String? date,
