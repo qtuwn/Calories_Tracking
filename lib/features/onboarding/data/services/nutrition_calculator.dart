@@ -1,3 +1,5 @@
+// NutritionCalculator hỗ trợ tính toán chỉ số dinh dưỡng cho người dùng mới trong quá trình onboarding.
+// Được sử dụng để hướng dẫn người dùng thiết lập mục tiêu dinh dưỡng cá nhân hóa.
 import 'package:calories_app/core/utils/bmi_calculator.dart';
 import 'package:calories_app/features/onboarding/domain/macro_utils.dart';
 import 'package:calories_app/features/onboarding/domain/nutrition_result.dart';

@@ -1,3 +1,5 @@
+// onboardingCacheProvider hỗ trợ kiểm tra nhanh trạng thái hoàn thành onboarding của người dùng mới.
+// Giúp app xác định có cần hướng dẫn onboarding cho user hay không.
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';

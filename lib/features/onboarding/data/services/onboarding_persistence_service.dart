@@ -1,3 +1,5 @@
+// OnboardingPersistenceService lưu trữ trạng thái onboarding của người dùng mới.
+// Hỗ trợ tiếp tục hướng dẫn onboarding khi người dùng quay lại app.
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
