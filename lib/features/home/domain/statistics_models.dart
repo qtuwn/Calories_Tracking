@@ -1,5 +1,9 @@
+// Các model thống kê cho tính năng Home/Diary
+// Bao gồm: NutritionStats, WorkoutStats, StepsStats, WeightStats, WeightPoint
+// Dùng để tổng hợp, phân tích và hiển thị dữ liệu sức khỏe, dinh dưỡng, vận động, cân nặng.
 /// Nutrition statistics for a time period
 class NutritionStats {
+  // Thống kê dinh dưỡng cho một khoảng thời gian (calo, protein, carbs, fat, số entry, mục tiêu calo)
   final double totalCalories;
   final double totalProtein;
   final double totalCarbs;
@@ -37,6 +41,7 @@ class NutritionStats {
 
 /// Workout statistics for a time period
 class WorkoutStats {
+  // Thống kê vận động cho một khoảng thời gian (calo đốt, thời lượng, số buổi, tên bài tập)
   final double totalCaloriesBurned;
   final double totalDurationMinutes;
   final int workoutCount;
@@ -63,6 +68,7 @@ class WorkoutStats {
 
 /// Steps statistics for a time period
 class StepsStats {
+  // Thống kê số bước chân cho một khoảng thời gian (tổng bước, mục tiêu)
   final int totalSteps;
   final int? targetSteps; // Optional daily step goal
 
@@ -92,6 +98,7 @@ class StepsStats {
 
 /// Weight statistics for a time period
 class WeightStats {
+  // Thống kê cân nặng cho một khoảng thời gian (cân nặng đầu/cuối, thay đổi, lịch sử, mục tiêu...)
   final double? latestWeight;
   final double? earliestWeight;
   final double? weightChange; // Positive = gain, negative = loss
@@ -162,6 +169,7 @@ class WeightStats {
 
 /// A single weight data point for charting
 class WeightPoint {
+// Điểm dữ liệu cân nặng (ngày, giá trị), dùng cho vẽ biểu đồ.
   final DateTime date;
   final double weight;
 
