@@ -141,6 +141,18 @@ class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
   }) : _firestore = instance ?? FirebaseFirestore.instance,
        _exploreRepo = exploreRepo ?? FirestoreExploreMealPlanRepository();
 
+  /// Returns a real-time [Stream] that emits the user's currently active
+  /// [UserMealPlan], or `null` when no active plan exists.
+  ///
+  /// Implementation notes:
+  ///  - Queries `isActive == true` ordered by `createdAt` descending, limited
+  ///    to 1 document to minimise read cost.
+  ///  - Both custom and template-applied plans are included (no type filter).
+  ///  - If multiple active plans are found (data integrity violation), a
+  ///    warning is logged and the most recent one is returned. The invariant
+  ///    should prevent this from occurring in practice.
+  ///  - Permission-denied errors are caught and re-logged with a clearer label
+  ///    before being rethrown so that UI layers can handle them appropriately.
   @override
   Stream<UserMealPlan?> getActivePlan(String userId) {
     debugPrint(
@@ -208,6 +220,12 @@ class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
         });
   }
 
+  /// Returns a real-time [Stream] of **all** [UserMealPlan] objects belonging
+  /// to the given user, sorted by creation time (newest first).
+  ///
+  /// Individual document parse failures are swallowed and logged as warnings
+  /// rather than crashing the entire stream, so a single corrupt document does
+  /// not break the plan list UI.
   @override
   Stream<List<UserMealPlan>> getPlansForUser(String userId) {
     debugPrint(
