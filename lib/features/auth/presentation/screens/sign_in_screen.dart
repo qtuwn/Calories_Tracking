@@ -11,6 +11,16 @@ class SignInScreen extends StatefulWidget {
     this.onSignUpPressed,
     this.onForgotPasswordPressed,
   });
+   const SignInScreen({
+    super.key,
+    this.onSignUpPressed,
+    this.onForgotPasswordPressed,
+  });
+   const SignInScreen({
+    super.key,
+    this.onSignUpPressed,
+    this.onForgotPasswordPressed,
+  });
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
