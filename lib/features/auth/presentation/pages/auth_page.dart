@@ -92,4 +92,44 @@ class _AuthPageState extends ConsumerState<AuthPage> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    // Watch auth state - if user signs in, show ProfileGate
+    final authStateAsync = ref.watch(authStateProvider);
+
+    return authStateAsync.when(
+      data: (user) {
+        if (user != null) {
+          // User signed in -> return ProfileGate which will handle routing
+          return ProfileGate(uid: user.uid);
+        }
+        // User not signed in -> show login/signup pages
+        return PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            SignInScreen(
+              onSignUpPressed: _navigateToSignUp,
+              onForgotPasswordPressed: _navigateToForgotPassword,
+            ),
+            SignUpScreen(onSignInPressed: _navigateToSignIn),
+          ],
+        );
+      },
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, stack) => PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          SignInScreen(
+            onSignUpPressed: _navigateToSignUp,
+            onForgotPasswordPressed: _navigateToForgotPassword,
+          ),
+          SignUpScreen(onSignInPressed: _navigateToSignIn),
+        ],
+      ),
+    );
+  }
 }
