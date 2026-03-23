@@ -10,7 +10,15 @@ class SignUpScreen extends StatefulWidget {
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
-
+@override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+@override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+@override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
