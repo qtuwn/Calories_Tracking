@@ -1,3 +1,4 @@
+// WelcomeScreen: Màn hình chào mừng đầu tiên trong onboarding, khởi động quy trình hướng dẫn người dùng mới.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calories_app/core/theme/theme.dart';
