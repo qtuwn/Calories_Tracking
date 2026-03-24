@@ -1,3 +1,5 @@
+// OnboardingPersistenceService chịu trách nhiệm lưu trữ và phục hồi trạng thái onboarding từ SharedPreferences.
+// Giúp người dùng tiếp tục quá trình hướng dẫn từ bước cuối cùng nếu họ thoát ứng dụng giữa chừng.
 // OnboardingPersistenceService lưu trữ trạng thái onboarding của người dùng mới.
 // Hỗ trợ tiếp tục hướng dẫn onboarding khi người dùng quay lại app.
 import 'dart:convert';

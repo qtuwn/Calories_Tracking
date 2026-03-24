@@ -1,3 +1,5 @@
+// NutritionCalculator cung cấp các logic tính toán quan trọng trong onboarding như BMR, TDEE và mục tiêu Calorie dựa trên thông tin người dùng cung cấp.
+// Đây là bộ não xử lý logic nghiệp vụ để đưa ra các gợi ý dinh dưỡng cá nhân hóa trong quá trình hướng dẫn.
 // NutritionCalculator hỗ trợ tính toán chỉ số dinh dưỡng cho người dùng mới trong quá trình onboarding.
 // Được sử dụng để hướng dẫn người dùng thiết lập mục tiêu dinh dưỡng cá nhân hóa.
 import 'package:calories_app/core/utils/bmi_calculator.dart';

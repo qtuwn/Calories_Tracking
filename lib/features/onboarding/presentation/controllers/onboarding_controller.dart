@@ -1,3 +1,5 @@
+// OnboardingController quản lý trạng thái (state) và logic điều hướng xuyên suốt quá trình hướng dẫn người dùng mới (onboarding).
+// Xử lý cập nhật thông tin cá nhân, tự động lưu nháp, tính toán chỉ số cơ bản và điều hướng các bước onboarding.
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calories_app/core/utils/units/weight_units.dart';

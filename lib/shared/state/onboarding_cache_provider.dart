@@ -1,3 +1,5 @@
+// onboardingCacheProvider quản lý việc lưu tạm (cache) trạng thái đã hoàn thành onboarding của người dùng.
+// Giúp ứng dụng quyết định nhanh việc hiển thị màn hình hướng dẫn hoặc vào thẳng màn hình chính mà không cần đợi phản hồi từ server.
 // onboardingCacheProvider hỗ trợ kiểm tra nhanh trạng thái hoàn thành onboarding của người dùng mới.
 // Giúp app xác định có cần hướng dẫn onboarding cho user hay không.
 import 'package:flutter/foundation.dart';
