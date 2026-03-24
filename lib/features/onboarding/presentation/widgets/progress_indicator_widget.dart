@@ -1,3 +1,4 @@
+// ProgressIndicatorWidget: Widget hiển thị tiến trình hoàn thành onboarding cho người dùng mới.
 import 'package:flutter/material.dart';
 import 'package:calories_app/core/theme/theme.dart';
 

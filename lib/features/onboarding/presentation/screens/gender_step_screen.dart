@@ -1,3 +1,4 @@
+// GenderStepScreen: Màn hình chọn giới tính trong quy trình onboarding, thiết kế UI cho bước nhập thông tin cá nhân.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calories_app/core/theme/theme.dart';
