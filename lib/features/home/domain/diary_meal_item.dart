@@ -1,17 +1,34 @@
 /// Model cho một món ăn trong bữa ăn (dành cho Diary/Home feature)
-/// 
-/// NOTE: This is different from the meal plan MealItem.
-/// This model is used specifically for diary entries and home display.
-/// For meal plans, use domain/meal_plans/user_meal_plan_repository.dart::MealItem
+///
+/// NOTE:
+/// - KHÔNG dùng cho meal plan (MealItem ở layer khác)
+/// - Dùng để hiển thị và lưu log trong diary/home
 class DiaryMealItem {
+  /// ID duy nhất của item (có thể là UUID hoặc từ DB)
   final String id;
+
+  /// Tên món ăn (ví dụ: "Ức gà luộc")
   final String name;
-  final double servingSize; // Khẩu phần (ví dụ: 1.5 = 1.5 phần)
-  final double caloriesPer100g; // Calories trên 100g
-  final double proteinPer100g; // Protein trên 100g
-  final double carbsPer100g; // Carbs trên 100g
-  final double fatPer100g; // Fat trên 100g
-  final double gramsPerServing; // Số gram cho 1 phần ăn chuẩn
+
+  /// Số khẩu phần người dùng ăn
+  /// Ví dụ: 1.5 = ăn 1.5 phần tiêu chuẩn
+  final double servingSize;
+
+  /// Calories tính trên 100g thực phẩm
+  final double caloriesPer100g;
+
+  /// Protein (gram) trên 100g
+  final double proteinPer100g;
+
+  /// Carbs (gram) trên 100g
+  final double carbsPer100g;
+
+  /// Fat (gram) trên 100g
+  final double fatPer100g;
+
+  /// Khối lượng (gram) của 1 khẩu phần tiêu chuẩn
+  /// Mặc định = 100g nếu không chỉ định
+  final double gramsPerServing;
 
   DiaryMealItem({
     required this.id,
@@ -24,21 +41,35 @@ class DiaryMealItem {
     this.gramsPerServing = 100.0,
   });
 
-  // Tính toán giá trị dinh dưỡng theo khẩu phần
+  // =========================
+  // Computed values (tính toán động)
+  // =========================
+
+  /// Tổng calories = (cal/100g * gram mỗi phần * số phần) / 100
   double get totalCalories =>
       (caloriesPer100g * gramsPerServing * servingSize) / 100;
-  
+
+  /// Tổng protein (gram)
   double get totalProtein =>
       (proteinPer100g * gramsPerServing * servingSize) / 100;
-  
+
+  /// Tổng carbs (gram)
   double get totalCarbs =>
       (carbsPer100g * gramsPerServing * servingSize) / 100;
-  
+
+  /// Tổng fat (gram)
   double get totalFat =>
       (fatPer100g * gramsPerServing * servingSize) / 100;
 
+  /// Tổng khối lượng thực tế đã ăn (gram)
   double get totalGrams => gramsPerServing * servingSize;
 
+  // =========================
+  // Copy (immutability helper)
+  // =========================
+
+  /// Tạo bản sao với field được thay đổi
+  /// Giữ immutable pattern (không mutate object gốc)
   DiaryMealItem copyWith({
     String? id,
     String? name,
@@ -61,6 +92,11 @@ class DiaryMealItem {
     );
   }
 
+  // =========================
+  // Serialization
+  // =========================
+
+  /// Convert object -> JSON (dùng cho lưu local / API)
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -74,6 +110,8 @@ class DiaryMealItem {
     };
   }
 
+  /// Parse JSON -> object
+  /// Lưu ý: ép kiểu num -> double để tránh lỗi runtime
   factory DiaryMealItem.fromJson(Map<String, dynamic> json) {
     return DiaryMealItem(
       id: json['id'] as String,
@@ -87,4 +125,3 @@ class DiaryMealItem {
     );
   }
 }
-
