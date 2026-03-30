@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-10: Ghi nhận nhật ký calories hằng ngày
+/// File này định nghĩa domain model cho DiaryEntry (nhật ký calories, thực phẩm, vận động)
+/// ===============================
 /// Type of diary entry
 enum DiaryEntryType {
   food,
