@@ -1,3 +1,31 @@
+// =============================================================================
+// UserMealPlanRepositoryImpl
+// =============================================================================
+// This file contains the Firestore (Cloud Firestore) implementation of the
+// [UserMealPlanRepository] interface, which handles all persistence operations
+// for a user's personal meal plans.
+//
+// Key responsibilities:
+//  - CRUD operations on the Firestore subcollection:
+//      users/{userId}/user_meal_plans/{planId}
+//  - Managing the "active plan" invariant: at most ONE plan can be active at
+//    any given time. All plan-switching operations use atomic batch writes to
+//    prevent race conditions.
+//  - Applying explore templates (pre-built plans) or custom plans as the
+//    user's current active plan, including deep-copying all days and meals.
+//  - Post-write verification after every critical write to detect failures
+//    early and surface them with meaningful error messages.
+//
+// Data model (Firestore subcollection hierarchy):
+//   users/{userId}/user_meal_plans/{planId}               ← plan document
+//   users/{userId}/user_meal_plans/{planId}/days/{dayId}  ← day document
+//   users/{userId}/user_meal_plans/{planId}/days/{dayId}/meals/{mealId} ← meal
+//
+// Domain / DTO mapping:
+//   All Firestore reads go through [UserMealPlanDto] → toDomain().
+//   All Firestore writes go through _domainToDto() → UserMealPlanDto.toFirestore().
+// =============================================================================
+
 import 'dart:developer' as dev;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +47,14 @@ import 'package:calories_app/features/meal_plans/data/dto/user_meal_plan_dto.dar
 import 'package:calories_app/features/meal_plans/data/dto/meal_item_dto.dart';
 
 /// Exception thrown when applying an explore template fails due to invalid data
+///
+/// Carries structured context (userId, templateId, dayIndex, slotIndex,
+/// mealType) so that stack traces in logs are immediately actionable —
+/// you can identify exactly which template slot caused the failure without
+/// having to re-run the operation.
+///
+/// [details] is an optional free-form map for extra diagnostic data
+/// (e.g. the actual numeric value that failed a range check).
 class MealPlanApplyException implements Exception {
   final String message;
   final String userId;
@@ -47,15 +83,32 @@ class MealPlanApplyException implements Exception {
   }
 }
 
-/// Firestore implementation of UserMealPlanRepository
+/// Firestore (Cloud Firestore) implementation of [UserMealPlanRepository].
 ///
-/// Uses DTOs internally and maps to domain models.
-/// Collection: users/{userId}/user_meal_plans/{planId}
+/// Uses Data Transfer Objects (DTOs) internally for Firestore serialisation and
+/// maps results back to domain model objects before returning them to callers.
+///
+/// Firestore collection path:
+///   `users/{userId}/user_meal_plans/{planId}`
+///
+/// Invariant enforced by this class:
+///   A user may have **at most one** active plan at any point in time.
+///   Every method that activates a plan first queries for existing active plans
+///   and deactivates them within the same [WriteBatch] to guarantee atomicity.
 class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
+  // Firestore instance used for all database operations.
   final FirebaseFirestore _firestore;
+
+  // Repository for reading pre-built explore (template) meal plans.
+  // Injected to allow substitution with a mock during unit tests.
   final ExploreMealPlanRepository _exploreRepo;
 
-  /// Helper to convert domain UserMealPlan to UserMealPlanDto
+  /// Converts a [UserMealPlan] domain model to a [UserMealPlanDto] for
+  /// Firestore serialisation.
+  ///
+  /// Enum fields are stored as their raw [String] values (`.value`) so that
+  /// Firestore documents remain human-readable and decoupled from Dart enum
+  /// internals. The reverse conversion is handled inside [UserMealPlanDto.toDomain()].
   UserMealPlanDto _domainToDto(UserMealPlan plan) {
     return UserMealPlanDto(
       id: plan.id,
@@ -78,12 +131,28 @@ class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
     );
   }
 
+  /// Creates a [UserMealPlanRepositoryImpl].
+  ///
+  /// Both [instance] and [exploreRepo] are optional to support dependency
+  /// injection (DI) in tests. When omitted, production singletons are used.
   UserMealPlanRepositoryImpl({
     FirebaseFirestore? instance,
     ExploreMealPlanRepository? exploreRepo,
   }) : _firestore = instance ?? FirebaseFirestore.instance,
        _exploreRepo = exploreRepo ?? FirestoreExploreMealPlanRepository();
 
+  /// Returns a real-time [Stream] that emits the user's currently active
+  /// [UserMealPlan], or `null` when no active plan exists.
+  ///
+  /// Implementation notes:
+  ///  - Queries `isActive == true` ordered by `createdAt` descending, limited
+  ///    to 1 document to minimise read cost.
+  ///  - Both custom and template-applied plans are included (no type filter).
+  ///  - If multiple active plans are found (data integrity violation), a
+  ///    warning is logged and the most recent one is returned. The invariant
+  ///    should prevent this from occurring in practice.
+  ///  - Permission-denied errors are caught and re-logged with a clearer label
+  ///    before being rethrown so that UI layers can handle them appropriately.
   @override
   Stream<UserMealPlan?> getActivePlan(String userId) {
     debugPrint(
@@ -151,6 +220,13 @@ class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
         });
   }
 
+  /// Returns a real-time [Stream] of **all** [UserMealPlan] objects belonging
+  /// to the given user, sorted by creation time (newest first).
+  ///
+  /// Individual document parse failures are swallowed and logged as warnings
+  /// rather than crashing the entire stream, so a single corrupt document does
+  /// not break the plan list UI.
+  /// 
   @override
   Stream<List<UserMealPlan>> getPlansForUser(String userId) {
     debugPrint(
