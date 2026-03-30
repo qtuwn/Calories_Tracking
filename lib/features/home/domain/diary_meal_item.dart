@@ -69,7 +69,7 @@ class DiaryMealItem {
   // =========================
 
   /// Tạo bản sao với field được thay đổi
-  /// Giữ immutable pattern (không mutate object gốc)
+  /// Giữ immutable pattern (không mutate Object gốc)
   DiaryMealItem copyWith({
     String? id,
     String? name,
