@@ -11,13 +11,25 @@ import 'package:calories_app/features/home/domain/statistics_models.dart';
 import 'package:calories_app/features/home/presentation/providers/diary_provider.dart';
 import 'package:calories_app/shared/state/auth_providers.dart';
 
+/// Manages the currently selected date on the Home Dashboard.
+///
+/// Date values are always normalised to midnight (00:00:00) via
+/// [_normalizeDate] so that equality comparisons between two "same day"
+/// [DateTime] instances always return `true`, regardless of the time
+/// component carried by the original value.
+///
+/// The initial state is today's date (normalised).
 class HomeSelectedDateNotifier extends Notifier<DateTime> {
+  /// Strips the time portion from [date], returning a [DateTime] at
+  /// midnight of the same calendar day in local time.
   static DateTime _normalizeDate(DateTime date) =>
       DateTime(date.year, date.month, date.day);
 
   @override
   DateTime build() => _normalizeDate(DateTime.now());
 
+  /// Changes the selected date to [date] (normalised to midnight).
+  /// Triggers a rebuild of all widgets that watch [homeSelectedDateProvider].
   void select(DateTime date) {
     state = _normalizeDate(date);
   }
