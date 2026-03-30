@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-10: Ghi nhận nhật ký calories hằng ngày
+/// File này cài đặt cache nhật ký calories bằng SharedPreferences
+/// ===============================
 import 'dart:convert';
 import 'package:flutter/foundation.dart'; // For debugPrint
 import 'package:shared_preferences/shared_preferences.dart';

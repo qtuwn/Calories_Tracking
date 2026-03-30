@@ -1,9 +1,12 @@
+// Model DiaryMealItem cho món ăn trong nhật ký (Diary/Home)
+// Khác với MealItem của meal plan, chỉ dùng cho diary/home.
 /// Model cho một món ăn trong bữa ăn (dành cho Diary/Home feature)
 /// 
 /// NOTE: This is different from the meal plan MealItem.
 /// This model is used specifically for diary entries and home display.
 /// For meal plans, use domain/meal_plans/user_meal_plan_repository.dart::MealItem
 class DiaryMealItem {
+  // Đại diện cho một món ăn trong nhật ký, dùng cho tính toán dinh dưỡng và hiển thị.
   final String id;
   final String name;
   final double servingSize; // Khẩu phần (ví dụ: 1.5 = 1.5 phần)
@@ -27,17 +30,22 @@ class DiaryMealItem {
   // Tính toán giá trị dinh dưỡng theo khẩu phần
   double get totalCalories =>
       (caloriesPer100g * gramsPerServing * servingSize) / 100;
+  // Tổng calories theo khẩu phần.
   
   double get totalProtein =>
       (proteinPer100g * gramsPerServing * servingSize) / 100;
+  // Tổng protein theo khẩu phần.
   
   double get totalCarbs =>
       (carbsPer100g * gramsPerServing * servingSize) / 100;
+  // Tổng carbs theo khẩu phần.
   
   double get totalFat =>
       (fatPer100g * gramsPerServing * servingSize) / 100;
+  // Tổng fat theo khẩu phần.
 
   double get totalGrams => gramsPerServing * servingSize;
+  // Tổng số gram cho món ăn này.
 
   DiaryMealItem copyWith({
     String? id,

@@ -1,3 +1,5 @@
+// HeightStepScreen: Thiết kế UI nhập chiều cao cho người dùng mới trong onboarding.
+// HeightStepScreen: Màn hình nhập chiều cao cho người dùng mới trong quá trình thiết lập thông tin cá nhân ban đầu.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calories_app/core/theme/theme.dart';

@@ -1,3 +1,4 @@
+// WeightRulerWidget: Widget UI chọn cân nặng cho người dùng mới trong onboarding.
 import 'package:flutter/material.dart';
 import 'package:calories_app/core/theme/theme.dart';
 

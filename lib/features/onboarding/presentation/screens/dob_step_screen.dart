@@ -1,3 +1,5 @@
+// DobStepScreen: Thiết kế UI chọn ngày sinh cho người dùng mới trong onboarding.
+// DobStepScreen: Màn hình chọn ngày sinh cho người dùng mới trong quá trình thiết lập thông tin cá nhân ban đầu.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

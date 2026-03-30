@@ -1,3 +1,5 @@
+// MacroUtils cung cấp tiện ích chuẩn hóa tỉ lệ dinh dưỡng cho onboarding.
+// Giúp hướng dẫn người dùng mới chọn tỉ lệ protein/carb/fat hợp lý.
 /// Utility functions for macro percentage normalization and validation
 class MacroUtils {
   /// Normalize macro percentages to ensure they total exactly 100%

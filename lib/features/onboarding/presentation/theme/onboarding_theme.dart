@@ -1,3 +1,4 @@
+// OnboardingTheme: Định nghĩa màu sắc, font, style cho toàn bộ giao diện onboarding.
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

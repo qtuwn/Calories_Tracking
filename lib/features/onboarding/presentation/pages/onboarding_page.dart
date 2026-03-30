@@ -1,3 +1,4 @@
+// OnboardingPage: Màn hình chính cho quy trình onboarding, điều hướng qua các bước giao diện hướng dẫn người dùng mới.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

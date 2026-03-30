@@ -1,3 +1,4 @@
+// ProfileService: Lưu trữ thông tin cá nhân hoàn chỉnh vào cơ sở dữ liệu chính sau khi hoàn tất onboarding.
 import 'profile.dart';
 import 'profile_repository.dart';
 import 'profile_cache.dart';

@@ -1,3 +1,11 @@
+/// ===============================
+/// DACK-12: Quản lý danh sách thực phẩm
+/// File này cài đặt repository quản lý danh sách thực phẩm với Firestore
+/// ===============================
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này cài đặt repository CRUD thực phẩm với Firestore
+/// ===============================
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../../domain/foods/food.dart';

@@ -1,10 +1,16 @@
+// Model Meal cho một bữa ăn, chứa nhiều DiaryMealItem
+// Dùng cho diary/home để tổng hợp dinh dưỡng theo bữa.
 import 'diary_meal_item.dart';
 import 'package:calories_app/features/meal_plans/domain/models/shared/meal_type.dart';
 
 /// Model đại diện cho một bữa ăn cụ thể trong ngày (ví dụ: Bữa sáng, Bữa trưa)
 /// Một [Meal] sẽ bao gồm loại bữa ăn và danh sách các món ăn [DiaryMealItem]
 class Meal {
+  develop
+  // Đại diện cho một bữa ăn, gồm nhiều DiaryMealItem.
+=======
   /// Loại bữa ăn (Breakfast, Lunch, Dinner, Snack,...)
+  main
   final MealType type;
   
   /// Danh sách các món ăn có trong bữa này
@@ -20,18 +26,22 @@ class Meal {
   /// Tổng năng lượng (kcal) của tất cả món ăn trong bữa
   double get totalCalories =>
       items.fold(0, (sum, item) => sum + item.totalCalories);
+  // Tổng calories của cả bữa ăn.
 
   /// Tổng lượng đạm (protein) của cả bữa ăn
   double get totalProtein =>
       items.fold(0, (sum, item) => sum + item.totalProtein);
+  // Tổng protein của cả bữa ăn.
 
   /// Tổng lượng đường/tinh bột (carbs) của cả bữa ăn
   double get totalCarbs =>
       items.fold(0, (sum, item) => sum + item.totalCarbs);
+  // Tổng carbs của cả bữa ăn.
 
   /// Tổng lượng chất béo (fat) của cả bữa ăn
   double get totalFat =>
       items.fold(0, (sum, item) => sum + item.totalFat);
+  // Tổng fat của cả bữa ăn.
 
   /// Đếm xem bữa ăn này có bao nhiêu món
   int get itemCount => items.length;

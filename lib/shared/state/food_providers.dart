@@ -1,3 +1,11 @@
+/// ===============================
+/// DACK-12: Quản lý danh sách thực phẩm
+/// File này định nghĩa các provider Riverpod cho danh sách thực phẩm
+/// ===============================
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này định nghĩa các provider Riverpod cho thực phẩm (Food)
+/// ===============================
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 

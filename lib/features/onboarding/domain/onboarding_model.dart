@@ -1,3 +1,5 @@
+// OnboardingModel: Model dữ liệu lưu trữ toàn bộ thông tin cá nhân ban đầu trong quá trình onboarding.
+// OnboardingModel định nghĩa cấu trúc dữ liệu cho quá trình onboarding, bao gồm các thông số cơ thể, mục tiêu cân nặng và kết quả tính toán dinh dưỡng.
 import 'package:calories_app/core/utils/units/weight_units.dart';
 
 /// Onboarding data model

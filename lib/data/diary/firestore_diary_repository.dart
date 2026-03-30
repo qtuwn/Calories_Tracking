@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-10: Ghi nhận nhật ký calories hằng ngày
+/// File này cài đặt repository lưu trữ nhật ký calories trên Firestore
+/// ===============================
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';

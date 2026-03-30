@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-10: Ghi nhận nhật ký calories hằng ngày
+/// File này định nghĩa service quản lý nhật ký calories, phối hợp cache và repository
+/// ===============================
 import 'dart:async';
 import 'package:flutter/foundation.dart'; // For debugPrint
 import 'diary_entry.dart';

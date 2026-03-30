@@ -11,13 +11,25 @@ import 'package:calories_app/features/home/domain/statistics_models.dart';
 import 'package:calories_app/features/home/presentation/providers/diary_provider.dart';
 import 'package:calories_app/shared/state/auth_providers.dart';
 
+/// Manages the currently selected date on the Home Dashboard.
+///
+/// Date values are always normalised to midnight (00:00:00) via
+/// [_normalizeDate] so that equality comparisons between two "same day"
+/// [DateTime] instances always return `true`, regardless of the time
+/// component carried by the original value.
+///
+/// The initial state is today's date (normalised).
 class HomeSelectedDateNotifier extends Notifier<DateTime> {
+  /// Strips the time portion from [date], returning a [DateTime] at
+  /// midnight of the same calendar day in local time.
   static DateTime _normalizeDate(DateTime date) =>
       DateTime(date.year, date.month, date.day);
 
   @override
   DateTime build() => _normalizeDate(DateTime.now());
 
+  /// Changes the selected date to [date] (normalised to midnight).
+  /// Triggers a rebuild of all widgets that watch [homeSelectedDateProvider].
   void select(DateTime date) {
     state = _normalizeDate(date);
   }
@@ -29,10 +41,18 @@ final homeSelectedDateProvider =
   HomeSelectedDateNotifier.new,
 );
 
-/// Model representing the user's daily calorie summary.
-/// 
-/// All calorie calculations are encapsulated here to keep business logic
-/// out of widgets and improve testability.
+/// View-model that represents the user's calorie budget for a single day.
+///
+/// Constructed by [homeDailySummaryProvider] and consumed by the calorie
+/// ring / summary card on the Home Dashboard.
+///
+/// Calorie accounting model used:
+///   netIntake  = consumed − burned          (exercise offsets food intake)
+///   remaining  = goal − netIntake           (how many kcal left in budget)
+///   exceeded   = netIntake − goal           (how many kcal over budget)
+///
+/// All results are clamped to ≥ 0 so widgets never have to guard against
+/// negative values.
 class DailySummary {
   DailySummary({
     required this.goal,
@@ -60,9 +80,19 @@ class DailySummary {
   double get progress => goal > 0 ? (netIntake / goal).clamp(0, 1) : 0.0;
 }
 
-/// Provider for the daily summary combining diary data with profile targets.
-/// Uses the same selected date as the Diary tab.
-/// Automatically updates when auth state changes (user switches accounts).
+/// Provides a [DailySummary] derived from the diary state and user profile.
+///
+/// Data sources:
+///  - [diaryProvider]              → consumed and burned calories for the
+///                                   currently selected diary date.
+///  - [currentUserProfileProvider] → the user's target daily calorie goal
+///                                   (targetKcal). Falls back to 0.0 while
+///                                   the profile is loading or on error.
+///
+/// Re-computes automatically whenever:
+///  - A food or exercise entry is added/removed in the diary.
+///  - The user changes their calorie goal in their profile.
+///  - The authenticated user switches accounts (auth state change).
 final homeDailySummaryProvider = Provider<DailySummary>((ref) {
   // Get diary state (uses selected date from diaryProvider)
   final diaryState = ref.watch(diaryProvider);
@@ -89,6 +119,11 @@ final homeDailySummaryProvider = Provider<DailySummary>((ref) {
   );
 });
 
+/// View-model for a single macronutrient's progress bar on the Home Dashboard.
+///
+/// Carries all display-related data (label, icon, unit, color) alongside the
+/// computed [progress] fraction, so widgets remain stateless and purely
+/// presentational.
 class MacroProgress {
   const MacroProgress({
     required this.label,
@@ -109,8 +144,21 @@ class MacroProgress {
   double get progress => (consumed / target).clamp(0, 1);
 }
 
-/// Provider for macro summary combining diary totals with profile targets.
-/// Uses selective watching to prevent unnecessary rebuilds.
+/// Provides the list of [MacroProgress] items (protein, carbs, fat) for the
+/// macro progress section on the Home Dashboard.
+///
+/// Optimisation — selective watching:
+///   Uses `.select()` for each macro field instead of watching the entire
+///   [diaryProvider] state. This means the provider (and any widget that
+///   watches it) only rebuilds when the specific macro total changes, not on
+///   every diary state update (e.g. a UI-only flag change would not trigger
+///   a rebuild here).
+///
+/// Zero-target guard:
+///   If the user's profile has not set a target for a macro (value is 0.0),
+///   the target is substituted with 1.0 before constructing [MacroProgress].
+///   This prevents a division-by-zero in [MacroProgress.progress] and keeps
+///   the progress bar at 0% until a real target is configured.
 final homeMacroSummaryProvider = Provider<List<MacroProgress>>((ref) {
   // Use selective watching instead of entire diary state
   final proteinConsumed = ref.watch(diaryProvider.select((s) => s.totalProtein));
@@ -164,6 +212,15 @@ final homeMacroSummaryProvider = Provider<List<MacroProgress>>((ref) {
   ];
 });
 
+/// View-model for a single row in the "recent entries" list on the Home
+/// Dashboard.
+///
+/// Flattens both food and exercise [DiaryEntry] objects into a common shape
+/// so the list widget does not need to branch on entry type.
+///
+/// [isExercise] is kept as an explicit flag so the UI can apply different
+/// styling (e.g. a different icon tint or a "−" prefix on calories) without
+/// re-inspecting the underlying entry type.
 class RecentDiaryEntry {
   const RecentDiaryEntry({
     required this.title,
