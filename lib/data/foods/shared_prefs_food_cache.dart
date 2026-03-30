@@ -1,4 +1,8 @@
 /// ===============================
+/// DACK-12: Quản lý danh sách thực phẩm
+/// File này cài đặt cache danh sách thực phẩm bằng SharedPreferences
+/// ===============================
+/// ===============================
 /// DACK-30: Xử lý CRUD thực phẩm với database
 /// File này cài đặt cache thực phẩm bằng SharedPreferences
 /// ===============================

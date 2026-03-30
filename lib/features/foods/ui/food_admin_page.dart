@@ -1,4 +1,8 @@
 /// ===============================
+/// DACK-12: Quản lý danh sách thực phẩm
+/// Bổ sung: File này là UI quản trị danh sách thực phẩm cho admin thao tác CRUD, filter, quản lý danh mục thực phẩm
+/// ===============================
+/// ===============================
 /// DACK-29: Thiết kế UI quản lý thực phẩm
 /// Bổ sung: File này là UI quản trị thực phẩm (FoodAdminPage) cho admin thao tác CRUD, filter, quản lý danh mục thực phẩm
 /// ===============================
