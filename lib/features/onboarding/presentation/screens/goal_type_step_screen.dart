@@ -1,3 +1,4 @@
+// GoalTypeStepScreen: Thiết kế UI chọn mục tiêu cá nhân cho người dùng mới trong onboarding.
 // GoalTypeStepScreen: Màn hình chọn mục tiêu cá nhân (giảm, giữ, tăng cân) cho người dùng mới trong quá trình thiết lập thông tin cá nhân ban đầu.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

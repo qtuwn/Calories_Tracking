@@ -1,3 +1,4 @@
+// NicknameStepScreen: Thiết kế UI nhập biệt danh cho người dùng mới trong onboarding.
 // NicknameStepScreen: Màn hình nhập biệt danh cho người dùng mới trong quá trình thiết lập thông tin cá nhân ban đầu.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
