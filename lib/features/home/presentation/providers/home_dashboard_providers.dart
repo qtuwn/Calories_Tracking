@@ -41,10 +41,18 @@ final homeSelectedDateProvider =
   HomeSelectedDateNotifier.new,
 );
 
-/// Model representing the user's daily calorie summary.
-/// 
-/// All calorie calculations are encapsulated here to keep business logic
-/// out of widgets and improve testability.
+/// View-model that represents the user's calorie budget for a single day.
+///
+/// Constructed by [homeDailySummaryProvider] and consumed by the calorie
+/// ring / summary card on the Home Dashboard.
+///
+/// Calorie accounting model used:
+///   netIntake  = consumed − burned          (exercise offsets food intake)
+///   remaining  = goal − netIntake           (how many kcal left in budget)
+///   exceeded   = netIntake − goal           (how many kcal over budget)
+///
+/// All results are clamped to ≥ 0 so widgets never have to guard against
+/// negative values.
 class DailySummary {
   DailySummary({
     required this.goal,
@@ -72,9 +80,19 @@ class DailySummary {
   double get progress => goal > 0 ? (netIntake / goal).clamp(0, 1) : 0.0;
 }
 
-/// Provider for the daily summary combining diary data with profile targets.
-/// Uses the same selected date as the Diary tab.
-/// Automatically updates when auth state changes (user switches accounts).
+/// Provides a [DailySummary] derived from the diary state and user profile.
+///
+/// Data sources:
+///  - [diaryProvider]              → consumed and burned calories for the
+///                                   currently selected diary date.
+///  - [currentUserProfileProvider] → the user's target daily calorie goal
+///                                   (targetKcal). Falls back to 0.0 while
+///                                   the profile is loading or on error.
+///
+/// Re-computes automatically whenever:
+///  - A food or exercise entry is added/removed in the diary.
+///  - The user changes their calorie goal in their profile.
+///  - The authenticated user switches accounts (auth state change).
 final homeDailySummaryProvider = Provider<DailySummary>((ref) {
   // Get diary state (uses selected date from diaryProvider)
   final diaryState = ref.watch(diaryProvider);
