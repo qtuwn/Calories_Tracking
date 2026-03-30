@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-10: Ghi nhận nhật ký calories hằng ngày
+/// File này định nghĩa interface repository cho DiaryEntry (CRUD nhật ký calories)
+/// ===============================
 import 'diary_entry.dart';
 
 /// Abstract repository interface for DiaryEntry operations

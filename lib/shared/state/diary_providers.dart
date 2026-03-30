@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-10: Ghi nhận nhật ký calories hằng ngày
+/// File này định nghĩa các provider Riverpod cho nhật ký calories (cache, repo, service, stream UI)
+/// ===============================
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 

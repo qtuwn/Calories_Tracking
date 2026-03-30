@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-10: Ghi nhận nhật ký calories hằng ngày
+/// File này định nghĩa interface cache cho DiaryEntry (lưu cache nhật ký calories)
+/// ===============================
 import 'diary_entry.dart';
 
 /// Abstract interface for local diary entry caching.
