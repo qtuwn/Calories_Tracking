@@ -110,7 +110,7 @@ class DiaryMealItem {
     };
   }
 
-  /// Parse JSON -> object
+  /// Parse JSON -> Object
   /// Lưu ý: ép kiểu num -> double để tránh lỗi runtime
   factory DiaryMealItem.fromJson(Map<String, dynamic> json) {
     return DiaryMealItem(
