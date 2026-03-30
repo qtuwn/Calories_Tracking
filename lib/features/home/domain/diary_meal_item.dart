@@ -96,7 +96,7 @@ class DiaryMealItem {
   // Serialization
   // =========================
 
-  /// Convert object -> JSON (dùng cho lưu local / API)
+  /// Convert object -> JSON (dùng cho lưu local/ API)
   Map<String, dynamic> toJson() {
     return {
       'id': id,
