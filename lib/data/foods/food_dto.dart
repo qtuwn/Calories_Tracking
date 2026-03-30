@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này định nghĩa DTO chuyển đổi giữa Firestore và domain Food
+/// ===============================
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/foods/food.dart';
 

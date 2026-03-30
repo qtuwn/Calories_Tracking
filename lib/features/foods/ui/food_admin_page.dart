@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này là trang quản trị thực phẩm (FoodAdminPage) cho admin CRUD thực phẩm
+/// ===============================
 // Trang quản trị thực phẩm (FoodAdminPage)
 // Chỉ dành cho admin, cho phép quản lý danh mục thực phẩm.
 // Sử dụng provider và service mới, UI hỗ trợ filter, thêm, sửa, xóa thực phẩm.

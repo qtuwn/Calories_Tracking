@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này định nghĩa interface cache cho thực phẩm (Food)
+/// ===============================
 import 'food.dart';
 
 /// Abstract interface for local food caching.
