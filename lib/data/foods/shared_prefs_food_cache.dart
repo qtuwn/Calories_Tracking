@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này cài đặt cache thực phẩm bằng SharedPreferences
+/// ===============================
 import 'dart:convert';
 import 'package:flutter/foundation.dart'; // For debugPrint
 import 'package:shared_preferences/shared_preferences.dart';

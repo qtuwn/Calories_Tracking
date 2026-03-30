@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này định nghĩa service quản lý thực phẩm, phối hợp cache và repository
+/// ===============================
 import 'dart:async';
 import 'package:flutter/foundation.dart'; // For debugPrint
 import 'food.dart';

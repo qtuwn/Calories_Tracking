@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này định nghĩa domain model cho thực phẩm (Food)
+/// ===============================
 /// Pure domain entity for Food
 /// 
 /// No Flutter or Firebase dependencies.

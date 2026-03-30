@@ -1,3 +1,7 @@
+/// ===============================
+/// DACK-30: Xử lý CRUD thực phẩm với database
+/// File này định nghĩa interface repository cho CRUD thực phẩm
+/// ===============================
 import 'food.dart';
 
 /// Abstract repository interface for Food operations
