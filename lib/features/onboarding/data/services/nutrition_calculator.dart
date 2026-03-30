@@ -1,3 +1,4 @@
+// NutritionCalculator: Tính toán chỉ số sức khỏe dựa trên thông tin cá nhân vừa nhập, phục vụ lưu trữ và hiển thị kết quả onboarding.
 // NutritionCalculator cung cấp các logic tính toán quan trọng trong onboarding như BMR, TDEE và mục tiêu Calorie dựa trên thông tin người dùng cung cấp.
 // Đây là bộ não xử lý logic nghiệp vụ để đưa ra các gợi ý dinh dưỡng cá nhân hóa trong quá trình hướng dẫn.
 // NutritionCalculator hỗ trợ tính toán chỉ số dinh dưỡng cho người dùng mới trong quá trình onboarding.
