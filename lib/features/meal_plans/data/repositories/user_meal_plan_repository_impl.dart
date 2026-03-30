@@ -226,6 +226,7 @@ class UserMealPlanRepositoryImpl implements UserMealPlanRepository {
   /// Individual document parse failures are swallowed and logged as warnings
   /// rather than crashing the entire stream, so a single corrupt document does
   /// not break the plan list UI.
+  /// 
   @override
   Stream<List<UserMealPlan>> getPlansForUser(String userId) {
     debugPrint(
