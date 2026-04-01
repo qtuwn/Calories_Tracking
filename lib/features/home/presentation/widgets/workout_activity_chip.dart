@@ -34,18 +34,14 @@ class WorkoutActivityChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                workoutType.icon,
-                size: 18,
-                color: AppColors.nearBlack,
-              ),
+              Icon(workoutType.icon, size: 18, color: AppColors.nearBlack),
               const SizedBox(width: 8),
               Text(
                 workoutType.displayName,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.nearBlack,
-                    ),
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.nearBlack,
+                ),
               ),
             ],
           ),
@@ -54,4 +50,3 @@ class WorkoutActivityChip extends StatelessWidget {
     );
   }
 }
-

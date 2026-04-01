@@ -51,7 +51,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
       final caloriesInput = _caloriesController.text.trim();
       final note = _noteController.text.trim();
 
-        // Neu khong nhap calo, provider se tu uoc tinh.
+      // Neu khong nhap calo, provider se tu uoc tinh.
       final caloriesBurned = caloriesInput.isNotEmpty
           ? double.parse(caloriesInput)
           : null;
