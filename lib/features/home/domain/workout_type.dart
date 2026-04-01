@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Enum representing quick-log workout types available on the Home screen.
-/// 
-/// Each workout type corresponds to a sport activity chip that users can tap
-/// to quickly log a manual workout session without browsing the full exercise catalog.
+/// Danh sach loai hoat dong dung cho ghi nhanh tren Home.
+///
+/// Moi gia tri tuong ung mot chip de nguoi dung ghi nhanh buoi tap ma
+/// khong can vao catalog bai tap day du.
 enum WorkoutType {
   running('running'),
   cycling('cycling'),
@@ -14,7 +14,7 @@ enum WorkoutType {
   final String value;
   const WorkoutType(this.value);
 
-  /// Display name in Vietnamese
+  /// Ten hien thi tieng Viet.
   String get displayName {
     switch (this) {
       case WorkoutType.running:
@@ -30,7 +30,7 @@ enum WorkoutType {
     }
   }
 
-  /// Icon for the workout type
+  /// Icon dai dien cho loai hoat dong.
   IconData get icon {
     switch (this) {
       case WorkoutType.running:
@@ -46,13 +46,10 @@ enum WorkoutType {
     }
   }
 
-  /// Default MET (Metabolic Equivalent of Task) value for calorie estimation.
-  /// 
-  /// These are moderate-intensity default values used when user doesn't
-  /// specify intensity. For more precise tracking, users should use the
-  /// full exercise catalog from ExerciseListScreen.
-  /// 
-  /// Reference: Compendium of Physical Activities
+  /// Gia tri MET mac dinh de uoc tinh calo.
+  ///
+  /// Su dung muc cuong do vua phai cho luong ghi nhanh.
+  /// Khi can do chinh xac cao hon, nen ghi qua danh sach bai tap chi tiet.
   double get defaultMET {
     switch (this) {
       case WorkoutType.running:
@@ -68,13 +65,9 @@ enum WorkoutType {
     }
   }
 
-  /// Calculate estimated calories burned based on MET formula.
-  /// 
+  /// Uoc tinh calo dot chay theo cong thuc MET.
+  ///
   /// Formula: MET * 3.5 * weight (kg) / 200 * minutes
-  /// 
-  /// This is a simplified estimation. For more accurate tracking,
-  /// use the full exercise catalog which may have distance-based
-  /// or level-based calculations.
   double calculateCalories({
     required double weightKg,
     required double durationMinutes,
@@ -83,7 +76,7 @@ enum WorkoutType {
     return (defaultMET * 3.5 * weightKg / 200) * durationMinutes;
   }
 
-  /// Parse WorkoutType from string value
+  /// Chuyen tu string sang [WorkoutType].
   static WorkoutType fromString(String? value) {
     return WorkoutType.values.firstWhere(
       (e) => e.value == value,
@@ -91,4 +84,3 @@ enum WorkoutType {
     );
   }
 }
-

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Exercise unit types
 enum ExerciseUnit {
   time('time'),
   distance('distance'),
@@ -17,7 +16,6 @@ enum ExerciseUnit {
   }
 }
 
-/// Exercise level with name and MET value
 class ExerciseLevel {
   final String name;
   final double met;
@@ -42,7 +40,6 @@ class ExerciseLevel {
   }
 }
 
-/// Exercise model representing an exercise in the catalog
 class Exercise {
   final String id;
   final String name;
@@ -74,7 +71,6 @@ class Exercise {
     final data = doc.data() as Map<String, dynamic>? ?? {};
     final updatedAtTimestamp = data['updatedAt'] as Timestamp?;
     
-    // Parse levels
     final levelsData = data['levels'] as List<dynamic>? ?? [];
     final levels = levelsData
         .map((e) => ExerciseLevel.fromMap(e as Map<String, dynamic>))
@@ -138,22 +134,16 @@ class Exercise {
     );
   }
 
-  /// Calculate calories burned for time-based exercises
-  /// Formula: MET * 3.5 * weight (kg) / 200 * minutes
   double calculateCaloriesTime(double weight, double minutes) {
     if (metPerHour == null || weight <= 0 || minutes <= 0) return 0.0;
     return (metPerHour! * 3.5 * weight / 200) * minutes;
   }
 
-  /// Calculate calories burned for distance-based exercises
-  /// Formula: MET * distance (km) * 3.5 * weight (kg) / 200 * 60
   double calculateCaloriesDistance(double weight, double distanceKm) {
     if (metPerKm == null || weight <= 0 || distanceKm <= 0) return 0.0;
     return metPerKm! * distanceKm * 3.5 * weight / 200 * 60;
   }
 
-  /// Calculate calories burned for level-based exercises
-  /// Formula: MET(level) * 3.5 * weight (kg) / 200 * minutes
   double calculateCaloriesLevel(double weight, double minutes, int levelIndex) {
     if (levels.isEmpty || levelIndex < 0 || levelIndex >= levels.length) {
       return 0.0;

@@ -8,26 +8,18 @@ import 'package:calories_app/features/home/domain/statistics_models.dart';
 import 'package:calories_app/shared/state/auth_providers.dart';
 import 'package:calories_app/data/firebase/date_utils.dart';
 
-// Note: DiaryRepository provider is now in lib/shared/state/diary_providers.dart
-// Use diary_providers.diaryRepositoryProvider instead
 
-/// Provider for WeightRepository
 final weightRepositoryProvider = Provider<WeightRepository>((ref) {
   return WeightRepository();
 });
 
-/// Helper provider to get the current user's UID
 final currentUserIdProvider = Provider<String?>((ref) {
   return ref.watch(authStateProvider).whenOrNull(
         data: (user) => user?.uid,
       );
 });
 
-// ============================================================================
-// NUTRITION STATISTICS PROVIDERS
-// ============================================================================
 
-/// Get nutrition statistics for today
 final todayNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -42,13 +34,11 @@ final todayNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
     final entries = await repository.fetchEntriesForDateRange(
       uid,
       today,
-      today, // Use same date for single-day query
+      today, 
     );
 
-    // Filter food entries only
     final foodEntries = entries.where((e) => e.type == DiaryEntryType.food).toList();
 
-    // Aggregate nutrition data
     double totalCalories = 0.0;
     double totalProtein = 0.0;
     double totalCarbs = 0.0;
@@ -61,7 +51,6 @@ final todayNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
       totalFat += entry.fat ?? 0.0;
     }
 
-    // Get target calories from profile
     final profileAsync = ref.read(currentUserProfileProvider);
     final targetCalories = profileAsync.maybeWhen(
       data: (profile) => profile?.targetKcal,
@@ -77,12 +66,10 @@ final todayNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
       targetCalories: targetCalories,
     );
   } catch (e) {
-    // Re-throw with a more user-friendly message
     throw Exception('Không thể tải dữ liệu dinh dưỡng hôm nay: ${e.toString()}');
   }
 });
 
-/// Get nutrition statistics for this week (last 7 days)
 final weekNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -90,7 +77,7 @@ final weekNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
   }
 
   final now = DateTime.now();
-  final startDate = now.subtract(const Duration(days: 6)); // Last 7 days including today
+  final startDate = now.subtract(const Duration(days: 6)); 
   final normalizedStart = DateUtils.normalizeToMidnight(startDate);
   
   final repository = ref.read(diary_providers.diaryRepositoryProvider);
@@ -100,10 +87,8 @@ final weekNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
     now,
   );
 
-  // Filter food entries only
   final foodEntries = entries.where((e) => e.type == DiaryEntryType.food).toList();
 
-  // Aggregate nutrition data
   double totalCalories = 0.0;
   double totalProtein = 0.0;
   double totalCarbs = 0.0;
@@ -116,7 +101,6 @@ final weekNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
     totalFat += entry.fat ?? 0.0;
   }
 
-  // Get target calories from profile (multiply by 7 for weekly target)
   final profileAsync = ref.read(currentUserProfileProvider);
   final dailyTarget = profileAsync.maybeWhen(
     data: (profile) => profile?.targetKcal,
@@ -134,7 +118,6 @@ final weekNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
   );
 });
 
-/// Get nutrition statistics for this month
 final monthNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -142,7 +125,7 @@ final monthNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
   }
 
   final now = DateTime.now();
-  final startDate = DateTime(now.year, now.month, 1); // First day of month
+  final startDate = DateTime(now.year, now.month, 1); 
   final normalizedStart = DateUtils.normalizeToMidnight(startDate);
   
   final repository = ref.read(diary_providers.diaryRepositoryProvider);
@@ -152,10 +135,8 @@ final monthNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
     now,
   );
 
-  // Filter food entries only
   final foodEntries = entries.where((e) => e.type == DiaryEntryType.food).toList();
 
-  // Aggregate nutrition data
   double totalCalories = 0.0;
   double totalProtein = 0.0;
   double totalCarbs = 0.0;
@@ -168,7 +149,6 @@ final monthNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
     totalFat += entry.fat ?? 0.0;
   }
 
-  // Get target calories from profile (multiply by days in month)
   final profileAsync = ref.read(currentUserProfileProvider);
   final dailyTarget = profileAsync.maybeWhen(
     data: (profile) => profile?.targetKcal,
@@ -187,11 +167,7 @@ final monthNutritionStatsProvider = FutureProvider<NutritionStats>((ref) async {
   );
 });
 
-// ============================================================================
-// WORKOUT STATISTICS PROVIDERS
-// ============================================================================
 
-/// Get workout statistics for today
 final todayWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -206,13 +182,11 @@ final todayWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
     final entries = await repository.fetchEntriesForDateRange(
       uid,
       today,
-      today, // Use same date for single-day query
+      today, 
     );
 
-    // Filter exercise entries only
     final exerciseEntries = entries.where((e) => e.type == DiaryEntryType.exercise).toList();
 
-    // Aggregate workout data
     double totalCaloriesBurned = 0.0;
     double totalDurationMinutes = 0.0;
     final exerciseNames = <String>{};
@@ -232,12 +206,10 @@ final todayWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
       exerciseNames: exerciseNames.toList()..sort(),
     );
   } catch (e) {
-    // Re-throw with a more user-friendly message
     throw Exception('Không thể tải dữ liệu tập luyện hôm nay: ${e.toString()}');
   }
 });
 
-/// Get workout statistics for this week (last 7 days)
 final weekWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -255,10 +227,8 @@ final weekWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
     now,
   );
 
-  // Filter exercise entries only
   final exerciseEntries = entries.where((e) => e.type == DiaryEntryType.exercise).toList();
 
-  // Aggregate workout data
   double totalCaloriesBurned = 0.0;
   double totalDurationMinutes = 0.0;
   final exerciseNames = <String>{};
@@ -279,7 +249,6 @@ final weekWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
   );
 });
 
-/// Get workout statistics for this month
 final monthWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -297,10 +266,8 @@ final monthWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
     now,
   );
 
-  // Filter exercise entries only
   final exerciseEntries = entries.where((e) => e.type == DiaryEntryType.exercise).toList();
 
-  // Aggregate workout data
   double totalCaloriesBurned = 0.0;
   double totalDurationMinutes = 0.0;
   final exerciseNames = <String>{};
@@ -321,31 +288,24 @@ final monthWorkoutStatsProvider = FutureProvider<WorkoutStats>((ref) async {
   );
 });
 
-// ============================================================================
-// STEPS STATISTICS PROVIDERS
-// ============================================================================
 
-/// Get steps statistics for today
 final todayStepsStatsProvider = FutureProvider<StepsStats>((ref) async {
   final healthRepo = ref.read(healthRepositoryProvider);
   
   try {
     final steps = await healthRepo.getTodaySteps();
     
-    // TODO: Get step goal from profile or settings if available
-    const targetSteps = null; // No step goal configured yet
+    const targetSteps = null; 
     
     return StepsStats(
       totalSteps: steps,
       targetSteps: targetSteps,
     );
   } catch (e) {
-    // Return 0 steps on error
     return StepsStats(totalSteps: 0, targetSteps: null);
   }
 });
 
-/// Get steps statistics for this week (last 7 days)
 final weekStepsStatsProvider = FutureProvider<StepsStats>((ref) async {
   final healthRepo = ref.read(healthRepositoryProvider);
   
@@ -359,7 +319,6 @@ final weekStepsStatsProvider = FutureProvider<StepsStats>((ref) async {
       endDate: now,
     );
     
-    // TODO: Get step goal from profile or settings if available
     const targetSteps = null;
     
     return StepsStats(
@@ -374,7 +333,6 @@ final weekStepsStatsProvider = FutureProvider<StepsStats>((ref) async {
   }
 });
 
-/// Get steps statistics for this month
 final monthStepsStatsProvider = FutureProvider<StepsStats>((ref) async {
   final healthRepo = ref.read(healthRepositoryProvider);
   
@@ -387,7 +345,6 @@ final monthStepsStatsProvider = FutureProvider<StepsStats>((ref) async {
       endDate: now,
     );
     
-    // TODO: Get step goal from profile or settings if available
     const targetSteps = null;
     
     return StepsStats(
@@ -402,13 +359,12 @@ final monthStepsStatsProvider = FutureProvider<StepsStats>((ref) async {
   }
 });
 
-/// Get daily steps breakdown for this week (Mon-Sun)
 final weekDailyStepsProvider = FutureProvider<Map<DateTime, int>>((ref) async {
   final healthRepo = ref.read(healthRepositoryProvider);
   
   try {
     final now = DateTime.now();
-    final weekday = now.weekday; // 1 = Monday, 7 = Sunday
+    final weekday = now.weekday; 
     final startOfWeek = now.subtract(Duration(days: weekday - 1));
     final normalizedStart = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
     
@@ -424,7 +380,6 @@ final weekDailyStepsProvider = FutureProvider<Map<DateTime, int>>((ref) async {
   }
 });
 
-/// Get daily steps breakdown for this month
 final monthDailyStepsProvider = FutureProvider<Map<DateTime, int>>((ref) async {
   final healthRepo = ref.read(healthRepositoryProvider);
   
@@ -444,11 +399,7 @@ final monthDailyStepsProvider = FutureProvider<Map<DateTime, int>>((ref) async {
   }
 });
 
-// ============================================================================
-// WEIGHT STATISTICS PROVIDERS
-// ============================================================================
 
-/// Get weight statistics for today
 final todayWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -461,28 +412,24 @@ final todayWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
     final today = DateUtils.normalizeToMidnight(now);
     final yesterday = today.subtract(const Duration(days: 1));
     
-    // Get today's weight entry
     final todayWeights = await repository.getWeightHistory(
       uid: uid,
       startDate: today,
       endDate: today,
     );
     
-    // Get yesterday's weight for comparison
     final yesterdayWeights = await repository.getWeightHistory(
       uid: uid,
       startDate: yesterday,
       endDate: yesterday,
     );
     
-    // Get recent weights for chart (last 7 days)
     final recentWeightsStream = repository.watchRecentWeights(uid: uid, days: 7);
     final recentWeights = await recentWeightsStream.first;
     
     final todayWeight = todayWeights.isNotEmpty ? todayWeights.last.weightKg : null;
     final yesterdayWeight = yesterdayWeights.isNotEmpty ? yesterdayWeights.last.weightKg : null;
     
-    // If no weight today, use latest weight from history
     final latestWeight = todayWeight ?? (recentWeights.isNotEmpty ? recentWeights.last.weightKg : null);
     
     final weightHistory = recentWeights
@@ -492,7 +439,6 @@ final todayWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
             ))
         .toList();
 
-    // Get target weight from profile
     final profileAsync = ref.read(currentUserProfileProvider);
     final targetWeight = profileAsync.maybeWhen(
       data: (profile) => profile?.targetWeight,
@@ -515,7 +461,6 @@ final todayWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
   }
 });
 
-/// Get weight statistics for this week (from start of week to today)
 final weekWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -526,22 +471,18 @@ final weekWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
     final repository = ref.read(weightRepositoryProvider);
     final now = DateTime.now();
     
-    // Calculate start of week (Monday = 1, Sunday = 7)
     final weekday = now.weekday;
     final startOfWeek = DateUtils.normalizeToMidnight(now.subtract(Duration(days: weekday - 1)));
     
-    // Get last week's end date for comparison
     final lastWeekEnd = startOfWeek.subtract(const Duration(days: 1));
     final lastWeekStart = lastWeekEnd.subtract(const Duration(days: 6));
     
-    // Get weights for this week
     final weekWeights = await repository.getWeightHistory(
       uid: uid,
       startDate: startOfWeek,
       endDate: now,
     );
     
-    // Get last week's weights for comparison
     final lastWeekWeights = await repository.getWeightHistory(
       uid: uid,
       startDate: lastWeekStart,
@@ -569,7 +510,6 @@ final weekWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
             ))
         .toList();
 
-    // Get target weight from profile
     final profileAsync = ref.read(currentUserProfileProvider);
     final targetWeight = profileAsync.maybeWhen(
       data: (profile) => profile?.targetWeight,
@@ -590,7 +530,6 @@ final weekWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
   }
 });
 
-/// Get weight statistics for this month (from start of month to today)
 final monthWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
   final uid = ref.watch(currentUserIdProvider);
   if (uid == null) {
@@ -603,18 +542,15 @@ final monthWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
     final startOfMonth = DateTime(now.year, now.month, 1);
     final normalizedStart = DateUtils.normalizeToMidnight(startOfMonth);
     
-    // Get last month's end date for comparison
     final lastMonthEnd = normalizedStart.subtract(const Duration(days: 1));
     final lastMonthStart = DateTime(lastMonthEnd.year, lastMonthEnd.month, 1);
     
-    // Get weights for this month
     final monthWeights = await repository.getWeightHistory(
       uid: uid,
       startDate: normalizedStart,
       endDate: now,
     );
     
-    // Get last month's weights for comparison
     final lastMonthWeights = await repository.getWeightHistory(
       uid: uid,
       startDate: lastMonthStart,
@@ -642,7 +578,6 @@ final monthWeightStatsProvider = FutureProvider<WeightStats>((ref) async {
             ))
         .toList();
 
-    // Get target weight from profile
     final profileAsync = ref.read(currentUserProfileProvider);
     final targetWeight = profileAsync.maybeWhen(
       data: (profile) => profile?.targetWeight,

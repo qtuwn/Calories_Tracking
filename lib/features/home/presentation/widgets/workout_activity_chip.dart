@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:calories_app/core/theme/theme.dart';
 import 'package:calories_app/features/home/domain/workout_type.dart';
 
-/// A reusable chip widget for workout activity selection on the Home screen.
-/// 
-/// Displays an activity icon and label, with tap interaction and visual feedback.
-/// Used in the "Hoạt động tập luyện" section for quick workout logging.
+/// Chip chon nhanh loai hoat dong tap luyen tren Home.
+///
+/// Hien thi icon + nhan va xu ly su kien tap de mo luong ghi nhanh.
 class WorkoutActivityChip extends StatelessWidget {
   const WorkoutActivityChip({
     super.key,
@@ -35,18 +34,14 @@ class WorkoutActivityChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                workoutType.icon,
-                size: 18,
-                color: AppColors.nearBlack,
-              ),
+              Icon(workoutType.icon, size: 18, color: AppColors.nearBlack),
               const SizedBox(width: 8),
               Text(
                 workoutType.displayName,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.nearBlack,
-                    ),
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.nearBlack,
+                ),
               ),
             ],
           ),
@@ -55,4 +50,3 @@ class WorkoutActivityChip extends StatelessWidget {
     );
   }
 }
-
