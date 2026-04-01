@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:calories_app/shared/config/gemini_config.dart';
 
+/// HTTP client goi Gemini de phan tich transcript ve JSON mon an.
 class GeminiVoiceApi {
   static const String _baseUrl = 'https://generativelanguage.googleapis.com/v1beta';
   static const String _model = 'gemini-pro';
@@ -19,6 +20,7 @@ class GeminiVoiceApi {
     }
   }
 
+  /// Goi Gemini va tra ve JSON da parse thanh Map.
   Future<Map<String, dynamic>> parseFoodTranscript(String transcript) async {
     if (transcript.trim().isEmpty) {
       throw Exception('Transcript cannot be empty');
@@ -98,6 +100,7 @@ class GeminiVoiceApi {
     }
   }
 
+  /// Tao prompt theo format output JSON bat buoc.
   String _buildPrompt(String transcript) {
     return '''
 You are a nutrition assistant. Parse the following voice transcript about food intake and return a JSON object with the following structure:
@@ -122,6 +125,7 @@ Return the JSON object now:
 ''';
   }
 
+  /// Loai bo markdown wrapper va cat dung doan JSON neu can.
   String _extractJsonFromText(String text) {
     String cleaned = text.trim();
     

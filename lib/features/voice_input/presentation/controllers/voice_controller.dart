@@ -6,7 +6,7 @@ import '../../domain/entities/recognized_food.dart';
 import '../../../../domain/foods/food.dart';
 import '../providers/voice_providers.dart';
 
-/// Status enum for voice input state machine
+/// Trang thai cho state machine cua voice input.
 enum VoiceStatus {
   idle,
   listening,
@@ -15,14 +15,14 @@ enum VoiceStatus {
   error,
 }
 
-/// State for voice input controller
+/// State duoc quan ly boi [VoiceController].
 class VoiceState {
   final VoiceStatus status;
   final RecognizedFood? recognizedFood;
   final String? errorMessage;
   final String? currentTranscript;
-  final String? transcript; // Final transcript (renamed from finalTranscript for clarity)
-  final List<Food> suggestions; // Changed from nullable to non-nullable with empty list default
+  final String? transcript; // Transcript cuoi cung dung de xu ly goi y.
+  final List<Food> suggestions; // Luon non-null, mac dinh la danh sach rong.
 
   const VoiceState({
     this.status = VoiceStatus.idle,
@@ -66,7 +66,7 @@ class VoiceState {
     );
   }
 
-  // Convenience getters for backward compatibility
+  // Convenience getters de UI doc state gon hon.
   bool get isListening => status == VoiceStatus.listening;
   bool get isProcessing => status == VoiceStatus.processing;
   bool get isIdle => status == VoiceStatus.idle;
@@ -74,14 +74,14 @@ class VoiceState {
   bool get hasResult => recognizedFood != null;
   bool get suggestionsReady => status == VoiceStatus.suggestionsReady && transcript != null;
   
-  // Legacy getter for compatibility
+  // Legacy getter giu tuong thich voi ma cu.
   String? get finalTranscript => transcript;
 }
 
-/// Controller for voice input feature
-/// 
-/// Manages the state of voice recognition and processing.
-/// Handles speech-to-text and integration with VoiceService.
+/// Controller dieu phoi toan bo luong nhap lieu bang giong noi.
+///
+/// Bao gom: xin quyen microphone, speech-to-text, xu ly transcript,
+/// va cap nhat state cho UI.
 class VoiceController extends Notifier<VoiceState> {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isInitialized = false;
