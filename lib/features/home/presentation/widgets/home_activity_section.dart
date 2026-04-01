@@ -10,7 +10,6 @@ import 'package:calories_app/features/home/presentation/widgets/workout_quick_lo
 import '../providers/home_dashboard_providers.dart';
 import '../providers/diary_provider.dart';
 
-/// PERFORMANCE: Memoized categories list (static data, never changes)
 const _activityCategories = [
   ActivityCategory(workoutType: WorkoutType.running),
   ActivityCategory(workoutType: WorkoutType.cycling),
@@ -19,12 +18,9 @@ const _activityCategories = [
   ActivityCategory(workoutType: WorkoutType.other),
 ];
 
-/// PERFORMANCE: Container widget that doesn't watch any stream providers.
-/// Static data is used directly, stream providers are isolated to leaf widgets.
 class HomeActivitySection extends StatelessWidget {
   const HomeActivitySection({super.key});
 
-  /// Handle tap on an activity chip.
   void _handleActivityChipTap(BuildContext context, WorkoutType workoutType) {
     if (workoutType == WorkoutType.other) {
       Navigator.of(
@@ -42,7 +38,6 @@ class HomeActivitySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // PERFORMANCE: Use const categories directly, no provider needed
     final categories = _activityCategories;
 
     return Container(
@@ -280,7 +275,6 @@ class _WorkoutCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Use selective watching to prevent unnecessary rebuilds
     final calories = ref.watch(
       diaryProvider.select((s) => s.totalCaloriesBurned),
     );
@@ -310,7 +304,6 @@ class _WorkoutCard extends ConsumerWidget {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigate to manual exercise list screen to add/log workout
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const ExerciseListScreen(),

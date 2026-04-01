@@ -1,21 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Model for an exercise log entry
-/// 
-/// Exercise logs are stored as a subcollection of the diary entry document:
-/// users/{uid}/diaryEntries/{date}/exerciseLogs/{logId}
-/// 
-/// Or as an embedded array within the diary entry document (current implementation).
 class ExerciseLog {
   final String id;
-  final String exerciseId; // Reference to exercises collection
-  final String exerciseName; // Denormalized for easy display
-  final String? imageUrl; // Denormalized image URL
-  final double durationMinutes; // Duration in minutes
-  final double caloriesBurned; // Calculated calories burned
-  final String? unit; // Unit type (time, distance, level)
-  final double? value; // Input value (minutes, km, etc.)
-  final String? levelName; // For level-based exercises
+  final String exerciseId; 
+  final String exerciseName; 
+  final String? imageUrl; 
+  final double durationMinutes; 
+  final double caloriesBurned; 
+  final String? unit; 
+  final double? value; 
+  final String? levelName; 
   final DateTime createdAt;
 
   ExerciseLog({
@@ -31,9 +25,7 @@ class ExerciseLog {
     required this.createdAt,
   });
 
-  /// Create ExerciseLog from Firestore map
   factory ExerciseLog.fromMap(Map<String, dynamic> map) {
-    // Helper to parse DateTime
     DateTime? parseDateTime(dynamic value) {
       if (value == null) return null;
       if (value is DateTime) return value;
@@ -48,7 +40,6 @@ class ExerciseLog {
       return null;
     }
 
-    // Helper to safely convert to double
     double toDouble(dynamic value) {
       if (value == null) return 0.0;
       if (value is double) return value;
@@ -77,7 +68,6 @@ class ExerciseLog {
     );
   }
 
-  /// Convert ExerciseLog to Firestore map
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{
       'id': id,
