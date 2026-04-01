@@ -8,27 +8,27 @@ import 'package:calories_app/features/home/presentation/providers/diary_provider
 import 'package:calories_app/shared/state/auth_providers.dart';
 import 'package:calories_app/data/firebase/date_utils.dart';
 
-/// Handles quick workout logging from the Home screen.
+/// Xu ly ghi nhanh hoat dong tap luyen tren man hinh Home.
 ///
-/// This notifier creates a manual `exercise` diary entry so the workout
-/// contributes to calories burned and report statistics.
+/// Notifier nay tao mot diary entry loai `exercise` de dong bo vao
+/// tong calo dot chay va cac bao cao thong ke.
 class QuickWorkoutLogNotifier extends Notifier<void> {
   @override
   void build() {
-    // Stateless notifier: acts like an action/service.
+    // Notifier khong luu state, chi dong vai tro xu ly hanh dong.
   }
 
-  /// Logs a quick workout entry for the currently selected diary date.
+  /// Ghi nhanh mot buoi tap theo ngay dang duoc chon trong diary.
   ///
-  /// If [caloriesBurned] is not provided, calories are estimated using MET
-  /// from [WorkoutType] and user's weight (or a default fallback).
+  /// Neu [caloriesBurned] de trong, he thong tu uoc tinh theo MET cua
+  /// [WorkoutType] va can nang nguoi dung (co fallback mac dinh).
   Future<void> logQuickWorkout({
     required WorkoutType workoutType,
     required double durationMinutes,
     double? caloriesBurned,
     String? note,
   }) async {
-    // Require authenticated user because entries are saved under user scope.
+    // Bat buoc dang nhap vi du lieu duoc luu theo user.
     final authState = ref.read(authStateProvider);
     final uid = authState.when(
       data: (user) => user?.uid,
@@ -52,7 +52,7 @@ class QuickWorkoutLogNotifier extends Notifier<void> {
         error: (_, __) => null,
       );
 
-      // Use provided calories when available, otherwise estimate from MET.
+      // Uu tien calo nguoi dung nhap tay, neu khong se tu tinh.
       final calories =
           caloriesBurned ??
           _calculateCalories(
@@ -65,7 +65,7 @@ class QuickWorkoutLogNotifier extends Notifier<void> {
         '[QuickWorkoutLogNotifier] 📊 Calculated calories: $calories kcal (weight=${profile?.weightKg ?? "unknown"} kg)',
       );
 
-      // Save to the date user is currently viewing in diary.
+      // Luu vao ngay ma nguoi dung dang xem tren diary.
       final diaryNotifier = ref.read(diaryProvider.notifier);
       final selectedDate = diaryNotifier.selectedDate;
 
@@ -73,9 +73,9 @@ class QuickWorkoutLogNotifier extends Notifier<void> {
         id: '',
         userId: uid,
         date: DateUtils.normalizeToIsoString(selectedDate),
-        // Synthetic ID marks this as quick-log (not from exercise catalog).
+        // ID tong hop de phan biet quick log voi bai tap tu catalog.
         exerciseId: 'quick_${workoutType.value}',
-        // If note is provided, use it as display name for better context.
+        // Neu co ghi chu thi dung lam ten hien thi cua buoi tap.
         exerciseName: note ?? workoutType.displayName,
         durationMinutes: durationMinutes,
         caloriesBurned: calories,
@@ -85,7 +85,7 @@ class QuickWorkoutLogNotifier extends Notifier<void> {
         createdAt: DateTime.now(),
       );
 
-      // Persist through diary service (which handles cache/invalidation logic).
+      // Luu qua diary service (co xu ly cache/invalidation noi bo).
       final service = ref.read(diary_providers.diaryServiceProvider);
       await service.addEntry(entry);
 
@@ -101,10 +101,9 @@ class QuickWorkoutLogNotifier extends Notifier<void> {
     }
   }
 
-  /// Estimates calories burned for a workout session.
+  /// Uoc tinh calo dot chay cho buoi tap.
   ///
-  /// Falls back to 70kg when profile weight is unavailable so the feature
-  /// still works for incomplete profiles.
+  /// Fallback 70kg neu profile chua co can nang de luong ghi nhanh van hoat dong.
   double _calculateCalories({
     required WorkoutType workoutType,
     required double durationMinutes,

@@ -18,9 +18,14 @@ const _activityCategories = [
   ActivityCategory(workoutType: WorkoutType.other),
 ];
 
+/// Khu vuc "Hoat dong tap luyen" tren Home.
+///
+/// - Tap vao chip thuong: mo bottom sheet ghi nhanh.
+/// - Tap vao "Khac" hoac nut more: mo danh sach bai tap day du.
 class HomeActivitySection extends StatelessWidget {
   const HomeActivitySection({super.key});
 
+  /// Dieu huong theo loai hoat dong duoc chon.
   void _handleActivityChipTap(BuildContext context, WorkoutType workoutType) {
     if (workoutType == WorkoutType.other) {
       Navigator.of(

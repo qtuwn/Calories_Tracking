@@ -5,14 +5,10 @@ import 'package:calories_app/core/theme/theme.dart';
 import 'package:calories_app/features/home/domain/workout_type.dart';
 import 'package:calories_app/features/home/presentation/providers/quick_workout_log_provider.dart';
 
-/// A modal bottom sheet for quickly logging a manual workout session.
+/// Bottom sheet ghi nhanh mot buoi tap thu cong.
 ///
-/// Allows the user to:
-/// - View the selected workout activity name and icon
-/// - Input duration in minutes (required)
-/// - Input calories burned (optional, auto-calculated if not provided)
-/// - Add an optional note
-/// - Save or cancel the workout log
+/// Nguoi dung co the nhap thoi luong, calo (tuy chon), ghi chu va luu ngay
+/// tu man hinh Home ma khong can vao danh sach bai tap chi tiet.
 class WorkoutQuickLogSheet extends ConsumerStatefulWidget {
   const WorkoutQuickLogSheet({super.key, required this.workoutType});
 
@@ -55,7 +51,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
       final caloriesInput = _caloriesController.text.trim();
       final note = _noteController.text.trim();
 
-      // Use custom calories if provided, otherwise let provider calculate
+        // Neu khong nhap calo, provider se tu uoc tinh.
       final caloriesBurned = caloriesInput.isNotEmpty
           ? double.parse(caloriesInput)
           : null;
@@ -70,7 +66,8 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
           );
 
       if (mounted) {
-        Navigator.of(context).pop(true); // Return true to indicate success
+        // Tra ket qua thanh cong de man hinh truoc co the refresh neu can.
+        Navigator.of(context).pop(true);
       }
     } catch (e) {
       setState(() {
@@ -101,7 +98,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header with icon and title
+                // Header: icon + ten loai hoat dong.
                 Row(
                   children: [
                     Container(
@@ -144,7 +141,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
                 ),
                 const SizedBox(height: 24),
 
-                // Duration input (required)
+                // Truong thoi luong la bat buoc.
                 Text(
                   'Thời lượng (phút) *',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -186,7 +183,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
                       return 'Thời lượng phải lớn hơn 0';
                     }
                     if (duration > 1440) {
-                      // 24 hours max
+                      // Gioi han toi da 24h de tranh du lieu bat thuong.
                       return 'Thời lượng không được quá 1440 phút';
                     }
                     return null;
@@ -194,7 +191,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
                 ),
                 const SizedBox(height: 20),
 
-                // Calories input (optional)
+                // Truong calo la tuy chon.
                 Text(
                   'Calo đốt cháy (tùy chọn)',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -249,7 +246,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
                 ),
                 const SizedBox(height: 20),
 
-                // Note input (optional)
+                // Ghi chu tuy chon cho boi canh buoi tap.
                 Text(
                   'Ghi chú (tùy chọn)',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -278,7 +275,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
                 ),
                 const SizedBox(height: 4),
 
-                // Error message
+                // Thong bao loi khi luu that bai.
                 if (_errorMessage != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
@@ -290,7 +287,7 @@ class _WorkoutQuickLogSheetState extends ConsumerState<WorkoutQuickLogSheet> {
                     ),
                   ),
 
-                // Action buttons
+                // Nhom hanh dong Huy/Luu.
                 Row(
                   children: [
                     Expanded(
