@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calories_app/features/home/presentation/providers/statistics_providers.dart';
 import 'package:calories_app/features/home/domain/statistics_models.dart';
 
-/// Workout Report Screen
-/// 
-/// Displays daily/weekly/monthly workout statistics including:
-/// - Total calories burned
-/// - Exercise duration and frequency
-/// - Workout types and trends
-/// 
-/// Navigation: Accessed from Account page "Xem báo cáo thống kê" > "Tập luyện"
+/// Man hinh bao cao thong ke hoat dong tap luyen.
+///
+/// Hien thi cac chi so theo ngay/tuan/thang:
+/// - Tong calo dot chay
+/// - Thoi luong va tan suat tap
+/// - Cac loai bai tap va xu huong
+///
+/// Duong dan: Tai Account > "Xem bao cao thong ke" > "Tap luyen"
 class WorkoutReportScreen extends ConsumerWidget {
   const WorkoutReportScreen({super.key});
 
@@ -39,7 +39,7 @@ class WorkoutReportScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Description card
+            // Card mo ta chuc nang bao cao.
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -75,7 +75,7 @@ class WorkoutReportScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // Today section
+            // Bao cao hom nay.
             _buildSection(
               context,
               title: 'Hôm nay',
@@ -83,7 +83,7 @@ class WorkoutReportScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // This week section
+            // Bao cao tuan nay.
             _buildSection(
               context,
               title: 'Tuần này',
@@ -91,7 +91,7 @@ class WorkoutReportScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // This month section
+            // Bao cao thang nay.
             _buildSection(
               context,
               title: 'Tháng này',
@@ -104,6 +104,7 @@ class WorkoutReportScreen extends ConsumerWidget {
     );
   }
 
+  /// Tao tieu chi tinh cho cac section ngay/tuan/thang.
   Widget _buildSection(BuildContext context, {required String title, required Widget child}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,6 +122,7 @@ class WorkoutReportScreen extends ConsumerWidget {
     );
   }
 
+  /// Lay va hien thi thong ke tap luyen hom nay.
   Widget _buildTodaySection(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(todayWorkoutStatsProvider);
 
@@ -143,6 +145,7 @@ class WorkoutReportScreen extends ConsumerWidget {
     );
   }
 
+  /// Lay va hien thi thong ke tap luyen tuan nay.
   Widget _buildWeekSection(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(weekWorkoutStatsProvider);
 
@@ -165,6 +168,7 @@ class WorkoutReportScreen extends ConsumerWidget {
     );
   }
 
+  /// Lay va hien thi thong ke tap luyen thang nay.
   Widget _buildMonthSection(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(monthWorkoutStatsProvider);
 
@@ -187,6 +191,7 @@ class WorkoutReportScreen extends ConsumerWidget {
     );
   }
 
+  /// Xay dung card thong ken chi tiet co thong ke tap luyen.
   Widget _buildWorkoutSummaryCard(BuildContext context, WorkoutStats stats) {
     return Container(
       width: double.infinity,
@@ -271,6 +276,7 @@ class WorkoutReportScreen extends ConsumerWidget {
     );
   }
 
+  /// Tao hang thong ke voi icon, nhan, gia tri.
   Widget _buildStatRow(
     BuildContext context,
     String label,
