@@ -6,7 +6,7 @@ import '../state/admin_tools_providers.dart';
 import '../domain/migration_report.dart';
 import '../domain/migration_exceptions.dart';
 
-/// Admin-only page for running migrations and repairs
+/// Man hinh Admin de chay migration va repair du lieu he thong.
 class AdminMigrationsPage extends ConsumerStatefulWidget {
   static const String routeName = '/admin/migrations';
 
@@ -18,26 +18,26 @@ class AdminMigrationsPage extends ConsumerStatefulWidget {
 }
 
 class _AdminMigrationsPageState extends ConsumerState<AdminMigrationsPage> {
-  // UI state
-  bool _dryRun = true; // Safe default
-  bool _strictMode = true; // Safe default
+  // UI state.
+  bool _dryRun = true; // Mac dinh an toan: khong ghi du lieu.
+  bool _strictMode = true; // Mac dinh nghiem ngat cho migration.
   double _defaultServingSize = 1.0;
   double _epsilon = 0.0001;
   int? _limitUsers;
   int? _limitTemplates;
   int? _limitPlansPerUser;
 
-  // Running state
+  // Running state.
   bool _isRunning = false;
   String? _currentOperation;
 
-  // Latest report (either MigrationReport or RepairReport)
+  // Bao cao moi nhat (MigrationReport hoac RepairReport).
   Object? _latestReport;
   String? _errorMessage;
 
   @override
   Widget build(BuildContext context) {
-    // Check admin guard
+    // Kiem tra quyen admin truoc khi cho phep truy cap.
     final adminGuardAsync = ref.watch(adminGuardProvider);
 
     return Scaffold(
@@ -112,7 +112,7 @@ class _AdminMigrationsPageState extends ConsumerState<AdminMigrationsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Warning banner if dryRun is false
+          // Canh bao khi tat dryRun (se ghi du lieu that).
           if (!_dryRun)
             Container(
               padding: const EdgeInsets.all(16),
@@ -139,7 +139,7 @@ class _AdminMigrationsPageState extends ConsumerState<AdminMigrationsPage> {
               ),
             ),
 
-          // Controls
+          // Nhom cau hinh.
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -263,7 +263,7 @@ class _AdminMigrationsPageState extends ConsumerState<AdminMigrationsPage> {
 
           const SizedBox(height: 16),
 
-          // Actions
+          // Nhom hanh dong migration/repair.
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16.0),

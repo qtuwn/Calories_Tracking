@@ -3,6 +3,7 @@ import '../../domain/repositories/voice_repository.dart';
 import '../../domain/entities/recognized_food.dart';
 import '../remote/gemini_voice_api.dart';
 
+/// Repository implementation cho voice parsing bang Gemini API.
 class VoiceRepositoryImpl implements VoiceRepository {
   final GeminiVoiceApi _api;
 
@@ -10,6 +11,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
       : _api = api ?? GeminiVoiceApi();
 
   @override
+  /// Parse transcript va map ket qua ve entity [RecognizedFood].
   Future<RecognizedFood> parseTranscript(String transcript) async {
     if (transcript.trim().isEmpty) {
       throw Exception('Transcript cannot be empty');

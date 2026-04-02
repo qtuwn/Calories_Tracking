@@ -3,28 +3,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/voice_controller.dart';
 import '../../domain/entities/recognized_food.dart';
 
-/// A circular microphone button for voice input
-/// 
-/// Features:
-/// - Long press to start listening
-/// - Release to stop listening and process transcript
-/// - Visual feedback for different states (idle, listening, processing, error, success)
+/// Nut microphone hinh tron cho tinh nang nhap lieu bang giong noi.
+///
+/// Nut doi mau/icon theo state: idle, listening, processing, error.
 class VoiceInputButton extends ConsumerWidget {
-  /// Callback when food is successfully recognized
-  /// 
-  /// TODO: Integrate with Meal Diary to automatically add the recognized food
+  /// Callback khi nhan dien mon an thanh cong.
+  ///
+  /// TODO: Tich hop them voi Meal Diary de auto-add.
   final void Function(RecognizedFood)? onFoodRecognized;
 
-  /// Size of the button (default: 64.0)
+  /// Kich thuoc nut (mac dinh: 64.0).
   final double size;
 
-  /// Color of the button when idle
+  /// Mau nut khi idle.
   final Color? idleColor;
 
-  /// Color of the button when listening
+  /// Mau nut khi dang nghe.
   final Color? listeningColor;
 
-  /// Color of the button when processing
+  /// Mau nut khi dang xu ly.
   final Color? processingColor;
 
   const VoiceInputButton({
@@ -41,18 +38,18 @@ class VoiceInputButton extends ConsumerWidget {
     final state = ref.watch(voiceControllerProvider);
     final controller = ref.read(voiceControllerProvider.notifier);
 
-    // Listen for successful recognition (backup callback via state change)
+    // Backup callback trong truong hop state co ket qua sau khi nhan dien.
     ref.listen<VoiceState>(
       voiceControllerProvider,
       (previous, next) {
         if (next.hasResult && next.recognizedFood != null) {
-          // This is a backup - the primary callback is passed to startListening
+          // Primary callback van duoc truyen qua startListening.
           onFoodRecognized?.call(next.recognizedFood!);
         }
       },
     );
 
-    // Determine button color based on state
+    // Xac dinh giao dien nut dua tren state hien tai.
     Color buttonColor;
     IconData iconData;
     double scale = 1.0;
@@ -63,7 +60,7 @@ class VoiceInputButton extends ConsumerWidget {
     } else if (state.isListening) {
       buttonColor = listeningColor ?? Colors.red;
       iconData = Icons.mic;
-      scale = 1.1; // Slightly larger when listening
+      scale = 1.1; // Phong nhe de tao feedback khi dang nghe.
     } else if (state.hasError) {
       buttonColor = Colors.grey;
       iconData = Icons.error_outline;
@@ -107,10 +104,9 @@ class VoiceInputButton extends ConsumerWidget {
   }
 }
 
-/// Widget to display the recognized food result
-/// 
-/// Shows the recognized food information in a card format.
-/// Can be used to preview the result before adding to diary.
+/// Card hien thi ket qua mon an da nhan dien.
+///
+/// Dung de preview truoc khi xu ly buoc tiep theo (vd: them vao diary).
 class RecognizedFoodCard extends ConsumerWidget {
   const RecognizedFoodCard({super.key});
 
@@ -158,7 +154,7 @@ class RecognizedFoodCard extends ConsumerWidget {
               _buildInfoRow('Notes', food.notes!),
             ],
             const SizedBox(height: 16),
-            // TODO: Add button to add to Meal Diary
+            // TODO: Them nut add vao Meal Diary.
             // ElevatedButton(
             //   onPressed: () {
             //     // Add to diary logic here

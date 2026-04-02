@@ -4,27 +4,27 @@ import '../data/user_plan_consistency_repair_repository.dart';
 import '../data/active_plan_repair_repository.dart';
 import '../data/admin_audit_log_repository.dart';
 
-/// Provider for ExploreTemplateMigrationRepository
+/// Provider cho repository migration Explore Template.
 final exploreTemplateMigrationRepoProvider =
     Provider<ExploreTemplateMigrationRepository>((ref) {
   final auditRepo = ref.watch(adminAuditLogRepoProvider);
   return FirestoreExploreTemplateMigrationRepository(auditRepo: auditRepo);
 });
 
-/// Provider for UserPlanConsistencyRepairRepository
+/// Provider cho repository sua loi tinh nhat quan plan nguoi dung.
 final userPlanConsistencyRepairRepoProvider =
     Provider<UserPlanConsistencyRepairRepository>((ref) {
   final auditRepo = ref.watch(adminAuditLogRepoProvider);
   return FirestoreUserPlanConsistencyRepairRepository(auditRepo: auditRepo);
 });
 
-/// Provider for ActivePlanRepairRepository
+/// Provider cho repository sua loi active plan.
 final activePlanRepairRepoProvider = Provider<ActivePlanRepairRepository>((ref) {
   final auditRepo = ref.watch(adminAuditLogRepoProvider);
   return FirestoreActivePlanRepairRepository(auditRepo: auditRepo);
 });
 
-/// Provider for AdminAuditLogRepository
+/// Provider cho repository ghi admin audit log.
 final adminAuditLogRepoProvider = Provider<AdminAuditLogRepository>((ref) {
   return FirestoreAdminAuditLogRepository();
 });
